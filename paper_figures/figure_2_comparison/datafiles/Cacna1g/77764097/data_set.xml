@@ -1,0 +1,1829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section-data-set>
+  <blue-channel nil="true"/>
+  <delegate>false</delegate>
+  <expression>true</expression>
+  <failed>false</failed>
+  <failed-facet>734881840</failed-facet>
+  <green-channel nil="true"/>
+  <id>77764097</id>
+  <name nil="true"/>
+  <qc-date>2007-05-29T14:32:12Z</qc-date>
+  <red-channel nil="true"/>
+  <reference-space-id>9</reference-space-id>
+  <rnaseq-design-id nil="true"/>
+  <section-thickness>25.0</section-thickness>
+  <specimen-id>77448587</specimen-id>
+  <sphinx-id>69873</sphinx-id>
+  <storage-directory>/external/mouse/prod41/image_series_77764097/</storage-directory>
+  <weight>5030</weight>
+  <products>
+    <product>
+      <abbreviation>MouseDiv</abbreviation>
+      <description>High-resolution ISH data detailing the expression of approximately 50 well-known drug target genes and 12 additional genes throughout the adult male mouse brain in seven different mouse strains and in adult female C57BL/6J mice.</description>
+      <id type="integer">16</id>
+      <name>Mouse Strains</name>
+      <product-name-facet type="integer">635972493</product-name-facet>
+      <resource>Mouse Strains Study</resource>
+      <species>Mouse</species>
+      <species-name-facet type="integer">1861523945</species-name-facet>
+      <tags>Diversity</tags>
+    </product>
+  </products>
+  <specimen>
+    <cell-prep-sample-id type="integer" nil="true"/>
+    <cell-reporter-id type="integer" nil="true"/>
+    <cortex-layer-id type="integer" nil="true"/>
+    <data nil="true"/>
+    <donor-id type="integer">13657</donor-id>
+    <ephys-result-id type="integer" nil="true"/>
+    <external-specimen-name nil="true"/>
+    <failed-facet type="integer">734881840</failed-facet>
+    <hemisphere>(none)</hemisphere>
+    <id type="integer">77448587</id>
+    <is-cell-specimen type="boolean">false</is-cell-specimen>
+    <is-ish type="boolean">false</is-ish>
+    <name>321-0066</name>
+    <parent-id type="integer" nil="true"/>
+    <parent-x-coord type="integer" nil="true"/>
+    <parent-y-coord type="integer" nil="true"/>
+    <parent-z-coord type="integer" nil="true"/>
+    <pinned-radius type="float" nil="true"/>
+    <rna-integrity-number type="float" nil="true"/>
+    <specimen-id-path>/77448587/</specimen-id-path>
+    <sphinx-id type="integer">26461</sphinx-id>
+    <structure-id type="integer" nil="true"/>
+    <tissue-ph type="float" nil="true"/>
+    <treatment-id type="integer" nil="true"/>
+    <weight type="integer">9000</weight>
+    <donor>
+      <age-id type="integer">15</age-id>
+      <chemotherapy nil="true"/>
+      <condition-description nil="true"/>
+      <data nil="true"/>
+      <date-of-birth type="datetime" nil="true"/>
+      <donor-condition-description-facet type="integer" nil="true"/>
+      <donor-race-only-facet type="integer" nil="true"/>
+      <donor-sex-facet type="integer">1306038106</donor-sex-facet>
+      <donor-strain-facet type="integer">4276187917</donor-strain-facet>
+      <donor-strain-only-facet type="integer">4276187917</donor-strain-only-facet>
+      <egfr-amplification nil="true"/>
+      <extent-of-resection nil="true"/>
+      <external-donor-name nil="true"/>
+      <full-genotype nil="true"/>
+      <handedness>unknown</handedness>
+      <id type="integer">13657</id>
+      <initial-kps nil="true"/>
+      <mgmt-ihc type="integer" nil="true"/>
+      <mgmt-methylation nil="true"/>
+      <molecular-subtype nil="true"/>
+      <multifocal nil="true"/>
+      <name>321-0066</name>
+      <organism-id type="integer">2</organism-id>
+      <pmi type="float">0.0</pmi>
+      <primary-tissue-source>AIBS</primary-tissue-source>
+      <pten-deletion nil="true"/>
+      <race-only nil="true"/>
+      <radiation-therapy nil="true"/>
+      <recurrence-by-six-months nil="true"/>
+      <sex>F</sex>
+      <sex-full-name>Female</sex-full-name>
+      <sleep-state nil="true"/>
+      <smoker nil="true"/>
+      <strain>C57BL/6J</strain>
+      <strain-only>C57BL/6J</strain-only>
+      <survival-days type="integer" nil="true"/>
+      <tags>321-0066 unknown</tags>
+      <theiler-stage nil="true"/>
+      <time-to-progression-or-recurrence nil="true"/>
+      <transgenic-mouse-id type="integer" nil="true"/>
+      <tumor-status nil="true"/>
+      <weight-grams type="float">15.2</weight-grams>
+    </donor>
+  </specimen>
+  <alignment3d>
+    <id type="integer">171798655</id>
+    <trv>0.00884527,0.0157765,0.931355,-0.0202539,0.884987,-0.0155197,-0.971403,-0.0208695,0.00875536,874.477,1638.4,13296.4</trv>
+    <tvr>0.00926478,-0.0244271,-1.02884,0.019034,1.12907,-0.0233679,1.07329,-0.0188937,0.010167,13711.9,-1555.81,-1042.8</tvr>
+  </alignment3d>
+  <section-images>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301011572/0301011572_0_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4257</height>
+      <id type="integer">77725358</id>
+      <image-height type="integer">4257</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">4673</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725358</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301011572/0301011572_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">0</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">4673</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799404</id>
+        <tvs>0.953289,0.0,0.0,0.953289,-3676.74,-2478.93</tvs>
+        <tsv>1.049,0.0,0.0,1.049,3856.9,2600.4</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301011572/0301011572_8_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4913</height>
+      <id type="integer">77725360</id>
+      <image-height type="integer">4913</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">4897</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725360</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301011572/0301011572_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">8</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">4897</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799406</id>
+        <tvs>0.953289,0.0,0.0,0.953289,-3559.85,-2237.58</tvs>
+        <tsv>1.049,0.0,0.0,1.049,3734.28,2347.22</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301011572/0301011572_16_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4881</height>
+      <id type="integer">77725362</id>
+      <image-height type="integer">4881</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">5041</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725362</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301011572/0301011572_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">16</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">5041</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799408</id>
+        <tvs>0.953289,0.0,0.0,0.953289,-3475.95,-2707.59</tvs>
+        <tsv>1.049,0.0,0.0,1.049,3646.27,2840.26</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301011572/0301011572_24_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">5409</height>
+      <id type="integer">77725364</id>
+      <image-height type="integer">5409</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">5761</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725364</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301011572/0301011572_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">24</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">5761</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799410</id>
+        <tvs>0.953289,-0.000680202,0.000680202,0.953289,-3121.67,-2687.8</tvs>
+        <tsv>1.049,0.000748495,-0.000748495,1.049,3276.64,2817.17</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301022200/0301022200_32_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">5905</height>
+      <id type="integer">77725368</id>
+      <image-height type="integer">5905</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">6625</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725368</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301022200/0301022200_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">32</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">6625</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799412</id>
+        <tvs>0.953269,-0.00619371,0.00619371,0.953269,-2676.06,-2239.26</tvs>
+        <tsv>1.04898,0.00681557,-0.00681557,1.04898,2822.39,2330.7</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301022200/0301022200_40_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6273</height>
+      <id type="integer">77725370</id>
+      <image-height type="integer">6273</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7185</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725370</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301022200/0301022200_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">40</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7185</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799414</id>
+        <tvs>0.953242,-0.00947336,0.00947336,0.953242,-2393.33,-2072.61</tvs>
+        <tsv>1.04895,0.0104245,-0.0104245,1.04895,2532.08,2149.11</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301022200/0301022200_48_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6545</height>
+      <id type="integer">77725372</id>
+      <image-height type="integer">6545</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7553</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725372</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301022200/0301022200_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">48</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7553</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799416</id>
+        <tvs>0.953265,-0.00670884,0.00670884,0.953265,-2196.84,-1894.78</tvs>
+        <tsv>1.04897,0.00738241,-0.00738241,1.04897,2318.41,1971.36</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301022200/0301022200_56_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6833</height>
+      <id type="integer">77725374</id>
+      <image-height type="integer">6833</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7921</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725374</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301022200/0301022200_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">56</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7921</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799418</id>
+        <tvs>0.953144,-0.0166191,0.0166191,0.953144,-1981.67,-1935.26</tvs>
+        <tsv>1.04884,0.0182877,-0.0182877,1.04884,2113.85,1993.54</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301031997/0301031997_64_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6481</height>
+      <id type="integer">77725378</id>
+      <image-height type="integer">6481</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8209</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725378</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301031997/0301031997_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">64</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8209</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799420</id>
+        <tvs>0.9532,-0.0130222,0.0130222,0.9532,-1868.66,-2032.17</tvs>
+        <tsv>1.0489,0.0143296,-0.0143296,1.0489,1989.16,2104.77</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301031997/0301031997_72_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6529</height>
+      <id type="integer">77725380</id>
+      <image-height type="integer">6529</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8289</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725380</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301031997/0301031997_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">72</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8289</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799422</id>
+        <tvs>0.953256,-0.00789015,0.00789015,0.953256,-1829.37,-1981.79</tvs>
+        <tsv>1.04896,0.00868233,-0.00868233,1.04896,1936.15,2062.94</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301031997/0301031997_80_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6529</height>
+      <id type="integer">77725382</id>
+      <image-height type="integer">6529</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8369</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725382</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301031997/0301031997_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">80</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8369</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799424</id>
+        <tvs>0.953155,-0.0159662,0.0159662,0.953155,-1820.26,-2057.96</tvs>
+        <tsv>1.04885,0.0175692,-0.0175692,1.04885,1945.34,2126.51</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301031997/0301031997_88_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6849</height>
+      <id type="integer">77725384</id>
+      <image-height type="integer">6849</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8609</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725384</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301031997/0301031997_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">88</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8609</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799426</id>
+        <tvs>0.953141,-0.0167888,0.0167888,0.953141,-1760.24,-1839.9</tvs>
+        <tsv>1.04884,0.0184745,-0.0184745,1.04884,1880.19,1897.24</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301042070/0301042070_96_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6465</height>
+      <id type="integer">77725388</id>
+      <image-height type="integer">6465</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8705</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725388</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301042070/0301042070_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">96</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8705</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799428</id>
+        <tvs>0.953282,-0.00361642,0.00361642,0.953282,-1751.06,-1949.09</tvs>
+        <tsv>1.04899,0.00397952,-0.00397952,1.04899,1844.61,2037.61</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301042070/0301042070_104_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6449</height>
+      <id type="integer">77725390</id>
+      <image-height type="integer">6449</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8641</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725390</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301042070/0301042070_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">104</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8641</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799430</id>
+        <tvs>0.953281,-0.00384189,0.00384189,0.953281,-1826.14,-1925.43</tvs>
+        <tsv>1.04899,0.00422762,-0.00422762,1.04899,1923.74,2012.04</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301042070/0301042070_112_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6337</height>
+      <id type="integer">77725392</id>
+      <image-height type="integer">6337</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8161</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725392</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301042070/0301042070_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">112</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">8161</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799432</id>
+        <tvs>0.953289,0.000481581,-0.000481581,0.953289,-2170.66,-1931.66</tvs>
+        <tsv>1.049,-0.000529932,0.000529932,1.049,2276.0,2027.46</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301042070/0301042070_120_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6465</height>
+      <id type="integer">77725394</id>
+      <image-height type="integer">6465</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7889</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725394</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301042070/0301042070_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">120</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7889</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799434</id>
+        <tvs>0.953283,0.00335893,-0.00335893,0.953283,-1927.04,-1797.19</tvs>
+        <tsv>1.04899,-0.00369617,0.00369617,1.04899,2014.81,1892.36</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301052200/0301052200_128_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6529</height>
+      <id type="integer">77725398</id>
+      <image-height type="integer">6529</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8545</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725398</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301052200/0301052200_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">128</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8545</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799436</id>
+        <tvs>0.953288,0.00152934,-0.00152934,0.953288,-1805.88,-1775.54</tvs>
+        <tsv>1.049,-0.00168288,0.00168288,1.049,1891.38,1865.58</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301052200/0301052200_136_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6897</height>
+      <id type="integer">77725400</id>
+      <image-height type="integer">6897</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9041</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725400</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301052200/0301052200_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">136</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9041</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799438</id>
+        <tvs>0.953288,-0.000831754,0.000831754,0.953288,-1474.51,-1500.82</tvs>
+        <tsv>1.049,0.000915263,-0.000915263,1.049,1548.13,1573.01</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301052200/0301052200_144_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">7457</height>
+      <id type="integer">77725402</id>
+      <image-height type="integer">7457</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9329</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725402</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301052200/0301052200_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">144</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9329</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799440</id>
+        <tvs>0.953206,-0.0125432,0.0125432,0.953206,-1296.14,-1076.32</tvs>
+        <tsv>1.04891,0.0138026,-0.0138026,1.04891,1374.39,1111.07</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301052200/0301052200_152_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">7249</height>
+      <id type="integer">77725404</id>
+      <image-height type="integer">7249</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9585</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725404</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301052200/0301052200_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">152</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9585</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799442</id>
+        <tvs>0.953282,-0.00371948,0.00371948,0.953282,-1188.7,-1052.42</tvs>
+        <tsv>1.04899,0.00409292,-0.00409292,1.04899,1251.25,1099.11</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301061671/0301061671_160_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6545</height>
+      <id type="integer">77725408</id>
+      <image-height type="integer">6545</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9713</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725408</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301061671/0301061671_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">160</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9713</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799444</id>
+        <tvs>0.953263,-0.00703839,0.00703839,0.953263,-1112.11,-1192.56</tvs>
+        <tsv>1.04897,0.00774505,-0.00774505,1.04897,1175.81,1242.35</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301061671/0301061671_168_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6513</height>
+      <id type="integer">77725410</id>
+      <image-height type="integer">6513</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9873</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725410</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301061671/0301061671_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">168</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9873</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799446</id>
+        <tvs>0.953272,-0.00574487,0.00574487,0.953272,-1018.23,-1178.63</tvs>
+        <tsv>1.04898,0.00632166,-0.00632166,1.04898,1075.55,1229.92</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301061671/0301061671_176_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6689</height>
+      <id type="integer">77725412</id>
+      <image-height type="integer">6689</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">10065</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725412</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301061671/0301061671_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">176</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">10065</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799448</id>
+        <tvs>0.953288,0.00137463,-0.00137463,0.953288,-958.398,-1148.22</tvs>
+        <tsv>1.049,-0.00151265,0.00151265,1.049,1003.62,1205.93</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301061671/0301061671_184_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6913</height>
+      <id type="integer">77725414</id>
+      <image-height type="integer">6913</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">10161</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725414</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301061671/0301061671_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">184</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">10161</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799451</id>
+        <tvs>0.953283,0.00321543,-0.00321543,0.953283,-946.953,-1175.67</tvs>
+        <tsv>1.04899,-0.00353827,0.00353827,1.04899,989.189,1236.62</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301071957/0301071957_192_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6625</height>
+      <id type="integer">77725418</id>
+      <image-height type="integer">6625</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">10193</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725418</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301071957/0301071957_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">192</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">10193</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799453</id>
+        <tvs>0.953267,0.00641273,-0.00641273,0.953267,-946.753,-1558.72</tvs>
+        <tsv>1.04898,-0.00705658,0.00705658,1.04898,982.122,1641.74</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301071957/0301071957_200_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6737</height>
+      <id type="integer">77725420</id>
+      <image-height type="integer">6737</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">10305</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725420</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301071957/0301071957_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">200</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">10305</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799455</id>
+        <tvs>0.953288,0.00104953,-0.00104953,0.953288,-870.887,-1354.97</tvs>
+        <tsv>1.049,-0.00115491,0.00115491,1.049,911.995,1422.36</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301071957/0301071957_208_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6705</height>
+      <id type="integer">77725422</id>
+      <image-height type="integer">6705</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">10289</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725422</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301071957/0301071957_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">208</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">10289</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799457</id>
+        <tvs>0.953289,0.000210648,-0.000210648,0.953289,-877.742,-1416.8</tvs>
+        <tsv>1.049,-0.000231798,0.000231798,1.049,920.423,1486.43</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301071957/0301071957_216_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6865</height>
+      <id type="integer">77725424</id>
+      <image-height type="integer">6865</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">10369</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725424</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301071957/0301071957_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">216</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">10369</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799459</id>
+        <tvs>0.953275,-0.00520711,0.00520711,0.953275,-757.627,-1410.12</tvs>
+        <tsv>1.04898,0.0057299,-0.0057299,1.04898,802.819,1474.85</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301101537/0301101537_288_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6945</height>
+      <id type="integer">77725448</id>
+      <image-height type="integer">6945</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9953</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725448</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301101537/0301101537_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">288</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9953</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799461</id>
+        <tvs>0.953252,-0.00833135,0.00833135,0.953252,-1017.25,-1578.19</tvs>
+        <tsv>1.04896,0.00916783,-0.00916783,1.04896,1081.52,1646.14</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301101537/0301101537_296_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">7057</height>
+      <id type="integer">77725450</id>
+      <image-height type="integer">7057</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">10353</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725450</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301101537/0301101537_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">296</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">10353</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799463</id>
+        <tvs>0.953282,-0.00373457,0.00373457,0.953282,-670.17,-1237.62</tvs>
+        <tsv>1.04899,0.00410953,-0.00410953,1.04899,708.089,1295.5</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301101537/0301101537_304_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6769</height>
+      <id type="integer">77725452</id>
+      <image-height type="integer">6769</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9681</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725452</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301101537/0301101537_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">304</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9681</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799465</id>
+        <tvs>0.953266,-0.00656301,0.00656301,0.953266,-1183.77,-1512.48</tvs>
+        <tsv>1.04898,0.00722195,-0.00722195,1.04898,1252.67,1578.0</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301101537/0301101537_312_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6705</height>
+      <id type="integer">77725454</id>
+      <image-height type="integer">6705</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9585</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725454</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch19/0301101537/0301101537_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">312</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9585</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799467</id>
+        <tvs>0.953206,-0.0125524,0.0125524,0.953206,-1213.93,-1730.0</tvs>
+        <tsv>1.04891,0.0138127,-0.0138127,1.04891,1297.2,1797.84</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301111712/0301111712_320_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">7073</height>
+      <id type="integer">77725458</id>
+      <image-height type="integer">7073</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9489</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725458</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301111712/0301111712_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">320</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9489</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799469</id>
+        <tvs>0.953118,-0.0180719,0.0180719,0.953118,-1228.62,-1454.2</tvs>
+        <tsv>1.04881,0.0198863,-0.0198863,1.04881,1317.51,1500.75</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301111712/0301111712_328_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">7249</height>
+      <id type="integer">77725460</id>
+      <image-height type="integer">7249</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9217</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725460</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301111712/0301111712_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">328</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9217</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799471</id>
+        <tvs>0.953153,-0.0161065,0.0161065,0.953153,-1363.5,-1361.19</tvs>
+        <tsv>1.04885,0.0177237,-0.0177237,1.04885,1454.24,1403.52</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301111712/0301111712_336_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6961</height>
+      <id type="integer">77725462</id>
+      <image-height type="integer">6961</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">9057</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725462</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301111712/0301111712_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">336</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">9057</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799473</id>
+        <tvs>0.953118,-0.0180626,0.0180626,0.953118,-1449.55,-1628.17</tvs>
+        <tsv>1.04881,0.0198761,-0.0198761,1.04881,1552.67,1678.83</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301111712/0301111712_344_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">8257</height>
+      <id type="integer">77725464</id>
+      <image-height type="integer">8257</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8801</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725464</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301111712/0301111712_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">344</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8801</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799475</id>
+        <tvs>0.953021,-0.0225953,0.0225953,0.953021,-1558.39,-313.304</tvs>
+        <tsv>1.04871,0.0248639,-0.0248639,1.04871,1642.09,289.815</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301121539/0301121539_352_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6961</height>
+      <id type="integer">77725468</id>
+      <image-height type="integer">6961</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8609</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725468</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301121539/0301121539_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">352</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8609</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799477</id>
+        <tvs>0.952883,-0.0278009,0.0278009,0.952883,-1613.97,-1546.25</tvs>
+        <tsv>1.04855,0.0305921,-0.0305921,1.04855,1739.64,1571.95</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301121539/0301121539_360_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6513</height>
+      <id type="integer">77725470</id>
+      <image-height type="integer">6513</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8305</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725470</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301121539/0301121539_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">360</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">7</tier-count>
+      <width type="integer">8305</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799479</id>
+        <tvs>0.953,-0.0234538,0.0234538,0.953,-1798.1,-1883.9</tvs>
+        <tsv>1.04868,0.0258086,-0.0258086,1.04868,1934.26,1929.2</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301121539/0301121539_368_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">7185</height>
+      <id type="integer">77725472</id>
+      <image-height type="integer">7185</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">8161</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725472</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301121539/0301121539_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">368</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">8161</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799481</id>
+        <tvs>0.953239,-0.00970252,0.00970252,0.953239,-1929.33,-1709.38</tvs>
+        <tsv>1.04895,0.0106767,-0.0106767,1.04895,2042.01,1772.45</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301121539/0301121539_376_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6193</height>
+      <id type="integer">77725474</id>
+      <image-height type="integer">6193</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7809</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725474</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301121539/0301121539_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">376</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7809</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799483</id>
+        <tvs>0.953236,-0.0100784,0.0100784,0.953236,-2080.42,-1897.47</tvs>
+        <tsv>1.04894,0.0110903,-0.0110903,1.04894,2203.29,1967.26</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301131746/0301131746_384_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">6017</height>
+      <id type="integer">77725478</id>
+      <image-height type="integer">6017</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7649</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725478</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301131746/0301131746_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">384</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7649</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799485</id>
+        <tvs>0.953178,-0.0145147,0.0145147,0.953178,-2150.83,-1957.78</tvs>
+        <tsv>1.04888,0.015972,-0.015972,1.04888,2287.23,2019.12</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301131746/0301131746_392_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">5761</height>
+      <id type="integer">77725480</id>
+      <image-height type="integer">5761</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7313</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725480</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301131746/0301131746_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">392</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7313</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799487</id>
+        <tvs>0.953208,-0.0123796,0.0123796,0.953208,-2301.7,-2107.37</tvs>
+        <tsv>1.04891,0.0136225,-0.0136225,1.04891,2442.99,2179.09</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301131746/0301131746_400_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">5585</height>
+      <id type="integer">77725482</id>
+      <image-height type="integer">5585</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">7057</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725482</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301131746/0301131746_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">400</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">7057</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799489</id>
+        <tvs>0.95328,-0.00408551,0.00408551,0.95328,-2467.33,-2199.98</tvs>
+        <tsv>1.04899,0.0044957,-0.0044957,1.04899,2598.1,2296.67</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301131746/0301131746_408_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">5297</height>
+      <id type="integer">77725484</id>
+      <image-height type="integer">5297</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">6737</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725484</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301131746/0301131746_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">408</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">6737</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799491</id>
+        <tvs>0.953272,-0.00563182,0.00563182,0.953272,-2603.69,-2374.58</tvs>
+        <tsv>1.04898,0.00619726,-0.00619726,1.04898,2745.94,2474.76</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301141935/0301141935_416_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">5153</height>
+      <id type="integer">77725488</id>
+      <image-height type="integer">5153</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">6417</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725488</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301141935/0301141935_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">416</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">6417</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799493</id>
+        <tvs>0.953271,-0.00583805,0.00583805,0.953271,-2755.77,-2410.06</tvs>
+        <tsv>1.04898,0.0064242,-0.0064242,1.04898,2906.24,2510.4</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301141935/0301141935_424_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4929</height>
+      <id type="integer">77725490</id>
+      <image-height type="integer">4929</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">5953</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725490</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301141935/0301141935_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">424</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">5953</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799495</id>
+        <tvs>0.953286,-0.00248553,0.00248553,0.953286,-2942.93,-2473.17</tvs>
+        <tsv>1.049,0.00273508,-0.00273508,1.049,3093.89,2586.29</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301141935/0301141935_432_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4481</height>
+      <id type="integer">77725492</id>
+      <image-height type="integer">4481</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">5553</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725492</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301141935/0301141935_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">432</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">5553</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799497</id>
+        <tvs>0.953281,-0.00377066,0.00377066,0.953281,-3153.85,-2725.96</tvs>
+        <tsv>1.04899,0.00414924,-0.00414924,1.04899,3319.67,2846.42</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301141935/0301141935_440_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4433</height>
+      <id type="integer">77725494</id>
+      <image-height type="integer">4433</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">5153</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725494</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301141935/0301141935_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">440</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">5153</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799499</id>
+        <tvs>0.953283,-0.00330982,0.00330982,0.953283,-3384.8,-2709.08</tvs>
+        <tsv>1.04899,0.00364213,-0.00364213,1.04899,3560.5,2829.48</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301152066/0301152066_448_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4305</height>
+      <id type="integer">77725498</id>
+      <image-height type="integer">4305</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">4689</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725498</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301152066/0301152066_1_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">448</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">4689</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799501</id>
+        <tvs>0.953269,-0.00613036,0.00613036,0.953269,-3617.03,-2790.26</tvs>
+        <tsv>1.04898,0.00674586,-0.00674586,1.04898,3813.01,2902.53</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301152066/0301152066_456_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4081</height>
+      <id type="integer">77725500</id>
+      <image-height type="integer">4081</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">4897</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725500</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301152066/0301152066_2_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">456</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">4897</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799503</id>
+        <tvs>0.952864,-0.0284479,0.0284479,0.952864,-3404.3,-3208.78</tvs>
+        <tsv>1.04853,0.0313041,-0.0313041,1.04853,3669.97,3257.94</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301152066/0301152066_464_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">3953</height>
+      <id type="integer">77725502</id>
+      <image-height type="integer">3953</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">5057</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725502</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301152066/0301152066_3_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">464</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">5057</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799505</id>
+        <tvs>0.953061,-0.0208319,0.0208319,0.953061,-3373.09,-3271.43</tvs>
+        <tsv>1.04875,0.0229234,-0.0229234,1.04875,3612.52,3353.59</tsv>
+      </alignment2d>
+    </section-image>
+    <section-image>
+      <annotated type="boolean">false</annotated>
+      <axes nil="true"/>
+      <bits-per-component type="integer">8</bits-per-component>
+      <data-set-id type="integer">77764097</data-set-id>
+      <expression type="boolean" nil="true"/>
+      <expression-path>/external/mouse/prod28/0301152066/0301152066_472_expression.aff</expression-path>
+      <failed type="boolean">false</failed>
+      <height type="integer">4225</height>
+      <id type="integer">77725504</id>
+      <image-height type="integer">4225</image-height>
+      <image-type>Primary</image-type>
+      <image-width type="integer">5057</image-width>
+      <isi-experiment-id type="integer" nil="true"/>
+      <lims1-id type="integer">77725504</lims1-id>
+      <number-of-components type="integer">3</number-of-components>
+      <ophys-experiment-id type="integer" nil="true"/>
+      <path>/external/aibssan/production20/stitch18/0301152066/0301152066_4_zoom.aff</path>
+      <projection-function nil="true"/>
+      <resolution type="float">1.049</resolution>
+      <section-number type="integer">472</section-number>
+      <specimen-id type="integer" nil="true"/>
+      <structure-id type="integer" nil="true"/>
+      <tier-count type="integer">6</tier-count>
+      <width type="integer">5057</width>
+      <x type="integer">0</x>
+      <y type="integer">0</y>
+      <alignment2d>
+        <id type="integer">171799507</id>
+        <tvs>0.953071,-0.0203791,0.0203791,0.953071,-3386.12,-3074.49</tvs>
+        <tsv>1.04876,0.0224252,-0.0224252,1.04876,3620.18,3148.47</tsv>
+      </alignment2d>
+    </section-image>
+  </section-images>
+  <plane_of_section/>
+  <age>P56</age>
+</section-data-set>
