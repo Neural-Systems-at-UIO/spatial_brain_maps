@@ -12,7 +12,7 @@ from tqdm import tqdm
 import concurrent.futures, os
 
 # ─── CONSTANTS ─────────────────────────────────────────────────────────────────
-METADATA_CSV = Path("../spatial_brain_maps/metadata/metadata_exp_removed.csv")
+METADATA_CSV = Path("../spatial_brain_maps/metadata/metadata.csv")
 NIIGZ_DIR      = Path("../outputs/gene_volumes")
 OUTPUT_DIR     = Path("data")
 

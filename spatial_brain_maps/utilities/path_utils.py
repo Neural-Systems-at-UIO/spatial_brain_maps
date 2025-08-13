@@ -4,7 +4,7 @@ from PyNutil.io.read_and_write import load_quint_json
 from pathlib import Path
 # load global metadata once
 path = str(Path(__file__).parent.parent) + os.sep
-metadata = pd.read_csv(Path(path, "metadata/metadata_exp_removed.csv"), index_col=None)
+metadata = pd.read_csv(Path(path, "metadata/metadata.csv"), index_col=None)
 
 def name_from_id(experiment_id):
     return metadata["animal_name"][metadata["experiment_id"] == experiment_id].values[0]

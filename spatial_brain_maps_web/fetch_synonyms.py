@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 # ─── CONSTANTS ─────────────────────────────────────────────────────────────────
 SPECIES      = "mus_musculus"
-METADATA_CSV = Path("../spatial_brain_maps/metadata/metadata_exp_removed.csv")
+METADATA_CSV = Path("../spatial_brain_maps/metadata/metadata.csv")
 OUTPUT_DIR   = Path("data")
 
 # ─── GENE INFO ─────────────────────────────────────────────────────────────────

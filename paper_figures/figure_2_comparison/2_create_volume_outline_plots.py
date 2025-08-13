@@ -138,7 +138,7 @@ print("\n5) Plotting horizontal slice for Plekhg1")
 hidx      = 180
 hsec      = extract_section(plekh, hidx, axis=2)
 houtline  = find_boundaries(atlas_annot[:,:,int(hidx*2.5)])
-horiz_path = os.path.join("datafiles/Plekhg1_horiz_outline.png")
+horiz_path = os.path.join("plots", "Plekhg1_horiz_outline.png")
 plot_outline(hsec, houtline,
              sz_vol=OUR_VOXEL_SIZE,
              sz_atlas=TARGET_VOXEL_SIZE,
@@ -154,7 +154,7 @@ cor_mask  = (np.isin(atlas_annot, cor_ids).astype(int)
 cidx      = 262
 csec      = extract_section(pitx, cidx, axis=1)
 coutline  = find_boundaries(cor_mask[:,int(cidx*2.5)])
-cor_path  = os.path.join("Pitx2_cor_outline.png")
+cor_path  = os.path.join("plots", "Pitx2_cor_outline.png")
 plot_outline(csec, coutline,
              sz_vol=OUR_VOXEL_SIZE,
              sz_atlas=TARGET_VOXEL_SIZE,
