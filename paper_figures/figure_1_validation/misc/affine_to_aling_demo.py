@@ -1,11 +1,14 @@
 """This script provides an example of how to apply """
 
 
- from paper_figures.validation_study.affine_utliities import update_alignment_with_ants_affine,  read_ants_affine
+from paper_figures.validation_study.affine_utliities import update_alignment_with_ants_affine,  read_ants_affine
 import numpy as np
 import cv2
 from glob import glob
 import json
+import copy
+from tqdm import tqdm
+
 np.set_printoptions(suppress=True)
 
 
@@ -13,10 +16,9 @@ root_dir =  r"/home/harryc/github/spatial_brain_maps/paper_figures/validation_st
 
 
 
-import copy
 
 brains = glob(f"{root_dir}/raters/pipeline_registrations/ds_human/*")
-for brain in brains:
+for brain in tqdm(brains):
     b = brain.split('/')[-1].split('.')[0]
     print(b)
     with open(brain, 'r') as file:

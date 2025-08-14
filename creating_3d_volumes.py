@@ -17,7 +17,7 @@ reg_folder = "/mnt/g/Allen_Realignment_EBRAINS_dataset/"
 meta = sbm.utilities.path_utils.metadata
 meta = meta[meta['sleep_state'] == 'Nothing']
 genes = meta['gene'].unique() 
-
+len(genes)
 def _process_gene(gene):
     gene_vol = sbm.gene_to_volume(
         gene,
