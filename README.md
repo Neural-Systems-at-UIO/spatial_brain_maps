@@ -32,7 +32,7 @@ If you wish to aggregate all experiments for a particular gene we can provide --
 spatial_brain_maps points --gene Adora2a --mode expression --res 25 --cut 30
 ```
 The above command for instance returns a json which when loaded in MeshView looks like this
-![Aggregated Adora2a expression point cloud in MeshView](examples/outputs/Adora2a_MeshView.png)
+![Aggregated Adora2a expression point cloud in MeshView](https://github.com/Neural-Systems-at-UIO/spatial_brain_maps/blob/main/examples/outputs/Adora2a_MeshView.png?raw=true)
 ### 3. Reconstruct a volume for an experiment ID and save to NIfTI
 if we instead want a 3D volume we use the volume command like such. 
 ```bash
