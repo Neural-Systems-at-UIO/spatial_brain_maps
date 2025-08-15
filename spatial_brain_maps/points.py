@@ -7,6 +7,7 @@ from PyNutil.processing.transformations import image_to_atlas_space
 from .utilities.path_utils import (
     id_to_data_path,
     id_to_quint_path,
+    metadata
 )
 from .utilities.alignment_functions import load_warped_image
 
