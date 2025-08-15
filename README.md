@@ -1,9 +1,11 @@
 
 # Spatial brain maps
 
-Spatial brain maps is a tool for viewing 3D gene expression in the Mouse brain. by fetching registration data shared via EBRAINS and ISH data shared via the Allen Institute, spatial brain maps reconstructs the 3D patterns of gene expression in a standardised coordinate space ([the blue brain projects version of the allen CCFv3](https://doi.org/10.1162/imag_a_00565)). Data can be reconstructed as either a 3D volume, or point cloud. 
+Spatial brain maps is a tool for viewing 3D gene expression in the Mouse brain. by fetching registration data shared via EBRAINS and ISH data shared via the Allen Institute, spatial brain maps reconstructs the 3D patterns of gene expression in a standardised coordinate space. Data can be reconstructed as either a 3D volume, or point cloud. 
 
-
+## Usage 
+There are many ways to interact with this package but the easiest entrypoint is the interactive search hosted at 
+https://neural-systems-at-uio.github.io/spatial_brain_maps/. This is integrated with Siibra so you can interactively search for genes which are up or down regulated in any given region, and explore those volumes of gene expression in 3D. 
 ## Installation
 
 ### Clone
