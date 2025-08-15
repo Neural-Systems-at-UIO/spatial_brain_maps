@@ -23,7 +23,7 @@ experiment IDs can be found via the [Allen Institutes mouse brain map portal](ht
 here we choose a resolution of 25 microns and only show values with an intesity greater than 30 (values are between 0 and 255).
 ```bash
 spatial_brain_maps points --id 71717640 --mode expression --res 25 --cut 30
-# Produces: 123456789_expression_cut30.json (MeshView compatible)
+# Produces: 71717640_expression_cut30.json (MeshView compatible)
 ```
 The above command produces a json file which you can view with [MeshView](https://meshview.apps.ebrains.eu/?atlas=ABA_Mouse_CCFv3_2017_25um)
 ### 2. Create a point cloud for a gene (aggregate all experiments)
@@ -36,16 +36,19 @@ The above command for instance returns a json which when loaded in MeshView look
 ### 3. Reconstruct a volume for an experiment ID and save to NIfTI
 if we instead want a 3D volume we use the volume command like such. 
 ```bash
-spatial_brain_maps volume --id 71717640 --mode expression --res 25 --out-nifti outputs/exp123456789
-# Produces: outputs/exp123456789.nii.gz
+spatial_brain_maps volume --id 71717640 --mode expression --res 25 --out-nifti outputs/exp71717640
+# Produces: outputs/exp71717640.nii.gz
 ```
+This produces a nifti file, which when viewed in software such as ITK Snap looks like this.
+![a sagittal section through the 71717640 experiment. It contains gaps between slices where there is no data.](https://github.com/Neural-Systems-at-UIO/spatial_brain_maps/blob/main/examples/outputs/sagitall_71717640.png?raw=true)
+Since we didn't choose to interpolate the data there are obvious gaps between the sections, this can be fixed by specifying --interpolate
 
 ### 4. Reconstruct an averaged gene expression volume (with interpolation)
 in the same way as we are able to aggregate the data for the point clouds we can so again here. For the volumes we are also able to include the interpolate argument which fills the empty space between each section. Be careful as this is quite computationally intensive. If this is taking a long time you can instead choose a lower resolution. 
 ```bash
 spatial_brain_maps volume --gene Cnp --mode expression --res 25 --interpolate --out-nifti outputs/Cnp_mean
 ```
-
+The above command produces this volume. ![a horizontal section through the Cnp gene volume. It is continous containing no gaps between sections](https://github.com/Neural-Systems-at-UIO/spatial_brain_maps/blob/main/examples/outputs/Cnp_horizontal.png?raw=true) Since the underlying experiments have each been interpolated before averaging the volume is smooth without obvious gaps. 
 ## Python API Examples
 We also provide a Python package which provides the same functionality
 ### 1. Reconstructing volumes
@@ -57,7 +60,7 @@ from spatial_brain_maps import gene_to_volume, write_nifti
 vol = gene_to_volume('Adora2a', resolution=25)
 
 # 2. Save a volume to NIfTI 
-write_nifti(vol, resolution=25, output_path="outputs/exp123456789")
+write_nifti(vol, resolution=25, output_path="outputs/exp71717640")
 ```
 ### 2. Producing point clouds. 
 

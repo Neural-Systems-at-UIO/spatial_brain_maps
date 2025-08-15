@@ -27,6 +27,8 @@ def id_to_volume(
     mode="expression",
     return_frequencies=False,
     missing_fill=np.nan,
+    do_interpolation=False,
+    k=5
 ):
 
     aff = os.path.join(reg_folder, "affine_registration_files")
@@ -63,6 +65,8 @@ def id_to_volume(
         fv[coords] += 1
     if missing_fill != 0:
         gv[fv == 0] = missing_fill
+    if do_interpolation:
+        vol = interpolate(gv, fv, k=k, resolution=resolution)
     return (gv, fv) if return_frequencies else gv
 
 
@@ -94,9 +98,10 @@ def gene_to_volume(
             mode=mode,
             return_frequencies=True,
             missing_fill=0,
+            do_interpolation = do_interpolation,
+            k=k
         )
-        if do_interpolation:
-            vol = interpolate(vol, freq, k=k, resolution=resolution)
+
         gv = gv + vol
         fv = fv + freq
     if not do_interpolation:
