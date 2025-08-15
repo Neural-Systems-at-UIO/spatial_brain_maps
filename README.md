@@ -11,7 +11,7 @@ https://neural-systems-at-uio.github.io/spatial_brain_maps/. This is integrated 
 ```bash
 pip install spatial-brain-maps
 ```
-
+you can view the PyPi package [here](https://pypi.org/project/spatial-brain-maps/) 
 
 
 ## Quick CLI Usage
