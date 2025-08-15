@@ -22,7 +22,6 @@ def section_index_to_atlas(
     section, resolution, cutoff, image_folder, affine_folder, nonlinear_folder, mode
 ):
     fname = os.path.splitext(os.path.basename(section["filename"]))[0]
-    section_number = section[""]
     img = load_warped_image(
         fname,
         image_folder,
@@ -91,8 +90,9 @@ def gene_to_points(
     resolution=10,
     sleep_state="Nothing",
 ):
-    metadata = metadata[metadata["sleep_state"] == sleep_state]
-    ids = metadata[metadata["gene"].str.lower() == gene.lower()].experiment_id.values
+    md = metadata
+    md = md[md["sleep_state"] == sleep_state]
+    ids = md[md["gene"].str.lower() == gene.lower()].experiment_id.values
     vs, ps = zip(
         *(
             id_to_points(i, image_folder, reg_folder, resolution, cutoff, mode)

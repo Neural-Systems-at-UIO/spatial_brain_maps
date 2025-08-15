@@ -10,7 +10,7 @@ from .volume import id_to_volume, gene_to_volume, interpolate, write_nifti
 
 # config constants
 image_folder_path = "/mnt/g/AllenDataalignmentProj/resolutionPixelSizeMetadata/ISH/"
-path_to_registration_files = "/mnt/g/Allen_Realignment_EBRAINS_dataset/"
+path_to_registration_files = "/mnt/g/Allen_Realignment_EBRAINS_dataset/registration_data"
 
 
 def main():

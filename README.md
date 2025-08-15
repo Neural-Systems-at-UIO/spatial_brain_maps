@@ -22,27 +22,28 @@ After installation a CLI command `spatial_brain_maps` is available.
 experiment IDs can be found via the [Allen Institutes mouse brain map portal](https://mouse.brain-map.org). 
 here we choose a resolution of 25 microns and only show values with an intesity greater than 30 (values are between 0 and 255).
 ```bash
-spatial_brain_maps points --id 123456789 --mode expression --res 25 --cut 30
+spatial_brain_maps points --id 71717640 --mode expression --res 25 --cut 30
 # Produces: 123456789_expression_cut30.json (MeshView compatible)
 ```
 The above command produces a json file which you can view with [MeshView](https://meshview.apps.ebrains.eu/?atlas=ABA_Mouse_CCFv3_2017_25um)
 ### 2. Create a point cloud for a gene (aggregate all experiments)
 If you wish to aggregate all experiments for a particular gene we can provide --gene instead of --id
 ```bash
-spatial_brain_maps points --gene Adora2a --mode expression --res 25 --cut 20
+spatial_brain_maps points --gene Adora2a --mode expression --res 25 --cut 30
 ```
-
+The above command for instance returns a json which when loaded in MeshView looks like this
+![Aggregated Adora2a expression point cloud in MeshView](examples/outputs/Adora2a_MeshView.png)
 ### 3. Reconstruct a volume for an experiment ID and save to NIfTI
 if we instead want a 3D volume we use the volume command like such. 
 ```bash
-spatial_brain_maps volume --id 123456789 --mode expression --res 25 --out-nifti outputs/exp123456789
+spatial_brain_maps volume --id 71717640 --mode expression --res 25 --out-nifti outputs/exp123456789
 # Produces: outputs/exp123456789.nii.gz
 ```
 
 ### 4. Reconstruct an averaged gene expression volume (with interpolation)
 in the same way as we are able to aggregate the data for the point clouds we can so again here. For the volumes we are also able to include the interpolate argument which fills the empty space between each section. Be careful as this is quite computationally intensive. If this is taking a long time you can instead choose a lower resolution. 
 ```bash
-spatial_brain_maps volume --gene Adora2a --mode expression --res 25 --interpolate --out-nifti outputs/Adora2a_mean
+spatial_brain_maps volume --gene Cnp --mode expression --res 25 --interpolate --out-nifti outputs/Cnp_mean
 ```
 
 ## Python API Examples

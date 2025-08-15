@@ -68,8 +68,8 @@ def id_to_volume(
 
 def gene_to_volume(
     gene,
-    reg_folder,
     image_folder=None,
+    reg_folder=None,
     mode="expression",
     resolution=25,
     return_frequencies=False,
