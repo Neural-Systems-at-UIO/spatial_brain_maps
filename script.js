@@ -26,6 +26,38 @@ document.addEventListener('DOMContentLoaded', function () {
         metricSelect.disabled = !isStructureSort;
         structureLabel.classList.toggle('disabled', !isStructureSort);
         metricLabel.classList.toggle('disabled', !isStructureSort);
+        // Reflect disabled state in custom structure select trigger if initialized
+        const customWrapper = document.querySelector('.structure-select-wrapper');
+        if (customWrapper) {
+            const trigger = customWrapper.querySelector('.structure-select-trigger');
+            if (trigger) {
+                if (!isStructureSort) {
+                    trigger.classList.add('disabled');
+                    trigger.setAttribute('aria-disabled', 'true');
+                    trigger.tabIndex = -1;
+                    // Ensure panel is closed if disabling while open
+                    customWrapper.classList.remove('open');
+                    trigger.classList.add('has-disabled-tooltip');
+                    const tip = "Select 'Sort by structure metrics' to enable";
+                    trigger.setAttribute('data-disabled-tooltip', tip);
+                    trigger.setAttribute('title', tip);
+                } else {
+                    trigger.classList.remove('disabled');
+                    trigger.removeAttribute('aria-disabled');
+                    trigger.tabIndex = 0;
+                    trigger.classList.remove('has-disabled-tooltip');
+                    trigger.removeAttribute('data-disabled-tooltip');
+                    trigger.removeAttribute('title');
+                }
+            }
+        }
+        // Tooltip for metric select as well
+        if (!isStructureSort) {
+            const tip = "Select 'Sort by structure metrics' to enable";
+            metricSelect.setAttribute('title', tip);
+        } else {
+            metricSelect.removeAttribute('title');
+        }
     }
 
     // Load structures list
@@ -599,6 +631,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         trigger.addEventListener('click', () => {
+            if (trigger.classList.contains('disabled')) return; // ignore when disabled
             if (wrapper.classList.contains('open')) close(); else open();
         });
         searchInput.addEventListener('input', () => buildOptions(searchInput.value.trim()));
@@ -607,6 +640,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (li) selectValue(li.dataset.value);
         });
         wrapper.addEventListener('keydown', e => {
+            if (trigger.classList.contains('disabled')) return; // ignore keyboard when disabled
             if (!wrapper.classList.contains('open')) { if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } return; }
             switch (e.key) {
                 case 'Escape': close(); trigger.focus(); break;
@@ -629,5 +663,8 @@ document.addEventListener('DOMContentLoaded', function () {
             trigger.textContent = select.options[select.selectedIndex].textContent;
             select.dispatchEvent(new Event('change'));
         }
+
+    // Ensure disabled state reflects current sort mode after initialization
+    toggleStructureControls();
     }
 });
