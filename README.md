@@ -9,7 +9,7 @@ Spatial brain maps is a tool for viewing 3D gene expression in the Mouse brain. 
 ### Clone
 
 ```bash
-pip install spatial-brain-aps
+pip install spatial-brain-maps
 ```
 
 
@@ -19,13 +19,13 @@ pip install spatial-brain-aps
 After installation a CLI command `spatial_brain_maps` is available. 
 
 ### 1. Create a point cloud for an experiment ID. 
-experiment IDs can be found via the [Allen Institutes mouse brain map portal](https://mouse.brain-map.org)  
-here we choose a resolution of 25 microns and only show values with an intesity greater than 30 (values are between 0 and 255)
+experiment IDs can be found via the [Allen Institutes mouse brain map portal](https://mouse.brain-map.org). 
+here we choose a resolution of 25 microns and only show values with an intesity greater than 30 (values are between 0 and 255).
 ```bash
 spatial_brain_maps points --id 123456789 --mode expression --res 25 --cut 30
 # Produces: 123456789_expression_cut30.json (MeshView compatible)
 ```
-
+The above command produces a json file which you can view with [MeshView](https://meshview.apps.ebrains.eu/?atlas=ABA_Mouse_CCFv3_2017_25um)
 ### 2. Create a point cloud for a gene (aggregate all experiments)
 If you wish to aggregate all experiments for a particular gene we can provide --gene instead of --id
 ```bash
