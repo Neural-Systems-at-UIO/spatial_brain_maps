@@ -64,12 +64,12 @@ def id_to_volume(
     if missing_fill != 0:
         gv[fv == 0] = missing_fill
     return (gv, fv) if return_frequencies else gv
- 
+
 
 def gene_to_volume(
     gene,
     reg_folder,
-    image_folder = None, 
+    image_folder=None,
     mode="expression",
     resolution=25,
     return_frequencies=False,
@@ -114,9 +114,7 @@ def gene_to_volume(
 
 
 def interpolate(gv, fv, k, resolution):
-    atlas = brainglobe_atlasapi.BrainGlobeAtlas(
-        "ccfv3augmented_mouse_10um"
-    ).annotation
+    atlas = brainglobe_atlasapi.BrainGlobeAtlas("ccfv3augmented_mouse_10um").annotation
     atlas = np.transpose(atlas, [2, 0, 1])[::-1, ::-1, ::-1]
     atlas_sh = np.array(atlas.shape)
     tgt_sh = atlas_sh * (10 / resolution)
@@ -148,4 +146,4 @@ def write_nifti(volume, resolution, output_path, origin_offsets=None):
     img.set_qform(affine, code=1)
     img.header["xyzt_units"] = 3
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    nib.save(img, output_path + '.nii.gz')
+    nib.save(img, output_path + ".nii.gz")

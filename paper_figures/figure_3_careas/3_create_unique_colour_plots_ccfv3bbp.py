@@ -14,11 +14,12 @@ np.random.seed(42)
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
 annotation = atlas.annotation  # original label volume
 # Uncomment or adjust the following line if you require a specific orientation.
-annotation = np.transpose(annotation, (2, 0, 1))[::-1,::-1,::-1]
+annotation = np.transpose(annotation, (2, 0, 1))[::-1, ::-1, ::-1]
 # outline = find_boundaries(annotation, mode="subpixel", connectivity=annotation.ndim)
 
 # Build the original rgb_lookup mapping using each structure's id and its rgb_triplet.
-rgb_lookup = {i['id']: i['rgb_triplet'] for _, i in atlas.structures.items()}
+rgb_lookup = {i["id"]: i["rgb_triplet"] for _, i in atlas.structures.items()}
+
 
 def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100):
     """
@@ -30,7 +31,7 @@ def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100
     if offset_choices is None:
         # Small offsets to keep the new color similar to the original.
         offset_choices = [-20, 20]
-    
+
     for _ in range(max_tries):
         new_rgb = list(base_rgb)
         # Randomly decide how many channels to change: at least one, up to all three.
@@ -49,12 +50,13 @@ def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100
                 candidate = (
                     int(np.clip(base_rgb[0] + r_offset, 0, 255)),
                     int(np.clip(base_rgb[1] + g_offset, 0, 255)),
-                    int(np.clip(base_rgb[2] + b_offset, 0, 255))
+                    int(np.clip(base_rgb[2] + b_offset, 0, 255)),
                 )
                 if candidate != base_rgb and candidate not in taken:
                     return candidate
 
     raise ValueError("Unable to find a unique color for {}".format(base_rgb))
+
 
 # Create a recolored lookup ensuring unique rgb codes.
 unique_rgb_lookup = {}
@@ -77,8 +79,8 @@ recoloured_rgb_volume = np.zeros(volume_shape, dtype=np.uint8)
 # Fill in the volumes by mapping each structure id to its corresponding rgb triplet.
 # For the original RGB volume.
 max_label = annotation.max()  # assumes structure ids are non-negative integers
-rgb_array = np.zeros((max_label+1, 3), dtype=np.uint8)
-unique_rgb_array = np.zeros((max_label+1, 3), dtype=np.uint8)
+rgb_array = np.zeros((max_label + 1, 3), dtype=np.uint8)
+unique_rgb_array = np.zeros((max_label + 1, 3), dtype=np.uint8)
 with open("datafiles/allen_unique_rgb.json", "w") as f:
     json.dump(unique_rgb_lookup, f)
 for struct_id, color in tqdm(rgb_lookup.items()):
@@ -100,8 +102,9 @@ recol_folder = "plots/ccfv3bbp_recolored"
 os.makedirs(recol_folder, exist_ok=True)
 import concurrent.futures
 
+
 def save_slice(i):
-    # Extract the i-th slice for both volumes. 
+    # Extract the i-th slice for both volumes.
     # slice_og = og_rgb_volume[:, i]
     slice_rec = recoloured_rgb_volume[:, i]
     annot_slice = annotation[:, i]
@@ -130,7 +133,9 @@ def save_slice(i):
 
     # Plot recolored RGB with outline overlay, corners aligned
     fig, ax = plt.subplots(figsize=(8, 8), dpi=300)
-    ax.imshow(slice_rec, origin='upper', extent=(0, slice_rec.shape[1], slice_rec.shape[0], 0))
+    ax.imshow(
+        slice_rec, origin="upper", extent=(0, slice_rec.shape[1], slice_rec.shape[0], 0)
+    )
     # ax.imshow(
     #     1 - outline_slice,
     #     cmap='gray',
@@ -138,9 +143,15 @@ def save_slice(i):
     #     origin='upper',
     #     extent=(0, slice_rec.shape[1], slice_rec.shape[0], 0)
     # )
-    ax.axis('off')
-    plt.savefig(os.path.join(recol_folder, f"slice_{i:03d}.png"), bbox_inches='tight', pad_inches=0, dpi=300)
+    ax.axis("off")
+    plt.savefig(
+        os.path.join(recol_folder, f"slice_{i:03d}.png"),
+        bbox_inches="tight",
+        pad_inches=0,
+        dpi=300,
+    )
     plt.close(fig)
+
 
 # Number of slices along the first dimension.
 num_slices = og_rgb_volume.shape[1]

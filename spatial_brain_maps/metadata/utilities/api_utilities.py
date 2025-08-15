@@ -14,7 +14,7 @@ def fetch_data(base_url, criteria, num_rows, max_rows=None, max_retries=10):
             response = requests.get(request_str)
             if response.status_code == 200:
                 data = response.json()["msg"]
-                if (not data) :
+                if not data:
                     return all_data
                 if (max_rows is not None) and (start_row > max_rows):
                     return all_data

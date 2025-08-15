@@ -13,6 +13,7 @@ import requests
 from io import BytesIO
 import os
 
+
 def read_image(experiment_id, filename, target_resolution, mode, image_folder=None):
     if image_folder is None:
         # --- download straight from Allen API ---
@@ -57,6 +58,7 @@ def read_image(experiment_id, filename, target_resolution, mode, image_folder=No
     img = cv2.resize(img, (w2, h2), interpolation=cv2.INTER_AREA)
     return img, c
 
+
 def load_warped_image(
     filename,
     image_folder,
@@ -73,7 +75,7 @@ def load_warped_image(
     affine_tr = read_ants_affine(affine_path)
     nonlinear_tr, h, w = read_nonlinear(nonlinear_path)
 
-    img, c = read_image(experiment_id,  filename, target_resolution, mode, image_folder)
+    img, c = read_image(experiment_id, filename, target_resolution, mode, image_folder)
 
     if (affine_tr is None) or (nonlinear_tr is None):
         return img

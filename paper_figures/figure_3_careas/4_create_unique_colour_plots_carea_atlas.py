@@ -7,7 +7,10 @@ import os
 import matplotlib.pyplot as plt
 import random
 from skimage.segmentation import find_boundaries
+
 np.random.seed(52)
+
+
 # Helper to adjust a colour if necessary
 def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100):
     """
@@ -19,7 +22,7 @@ def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100
     if offset_choices is None:
         # Small offsets to keep the new color similar to the original.
         offset_choices = [-20, 20]
-    
+
     for _ in range(max_tries):
         new_rgb = list(base_rgb)
         # Randomly decide how many channels to change: at least one, up to all three.
@@ -38,17 +41,17 @@ def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100
                 candidate = (
                     int(np.clip(base_rgb[0] + r_offset, 0, 255)),
                     int(np.clip(base_rgb[1] + g_offset, 0, 255)),
-                    int(np.clip(base_rgb[2] + b_offset, 0, 255))
+                    int(np.clip(base_rgb[2] + b_offset, 0, 255)),
                 )
                 if candidate != base_rgb and candidate not in taken:
                     return candidate
 
     raise ValueError("Unable to find a unique color for {}".format(base_rgb))
 
-# Load the unique colour mapping.
-with open('datafiles/allen_unique_rgb.json', 'r') as f:
-    allen_rgb_dict = json.load(f)
 
+# Load the unique colour mapping.
+with open("datafiles/allen_unique_rgb.json", "r") as f:
+    allen_rgb_dict = json.load(f)
 
 
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
@@ -80,12 +83,12 @@ for cluster_id in tqdm(np.unique(vol)):
         new_color = base_color
     colour_lookup[cluster_id] = new_color
     taken_colors.add(new_color)
-    
+
 # Now save the new colour lookup as a .label file for ITK-SNAP.
 # ITK-SNAP expects a header and then rows in the format:
 # IDX   -R-  -G-  -B-  -A--  VIS MSH  LABEL
-output_label_file = 'datafiles/careas.label'
-with open(output_label_file, 'w') as f_label:
+output_label_file = "datafiles/careas.label"
+with open(output_label_file, "w") as f_label:
     f_label.write("################################################\n")
     f_label.write("# ITK-SnAP Label Description File\n")
     f_label.write("# File format: \n")
@@ -106,7 +109,9 @@ with open(output_label_file, 'w') as f_label:
     # Sorting by cluster_id for consistent order.
     for cluster_id, rgb in sorted(colour_lookup.items()):
         # We use a default transparency=1, visibility=1, mesh visibility=0
-        f_label.write(f'{cluster_id:<5} {rgb[0]:<5} {rgb[1]:<5} {rgb[2]:<5}    1  1  0    "Carea_{cluster_id}"\n')
+        f_label.write(
+            f'{cluster_id:<5} {rgb[0]:<5} {rgb[1]:<5} {rgb[2]:<5}    1  1  0    "Carea_{cluster_id}"\n'
+        )
 
 # Create a coloured volume based on the lookup.
 # The coloured volume will have an extra channel for R, G, B.
@@ -121,13 +126,15 @@ os.makedirs(recol_folder, exist_ok=True)
 # Save each slice (along the first axis) of the colored volume as a PNG in the new folder.
 num_slices = colored_vol.shape[1]
 for i in tqdm(range(num_slices)):
-    slice_rec = colored_vol[:,i]
+    slice_rec = colored_vol[:, i]
     slice_rec[slice_rec == 0] = 255
-    annot_slice = vol[:,i]
+    annot_slice = vol[:, i]
     # outline_slice = find_boundaries(annot_slice, connectivity=2, mode='subpixel')
     # outline_mask = outline_slice > 0
     fig, ax = plt.subplots(figsize=(8, 8), dpi=300)
-    ax.imshow(slice_rec, origin='upper', extent=(0, slice_rec.shape[1], slice_rec.shape[0], 0))
+    ax.imshow(
+        slice_rec, origin="upper", extent=(0, slice_rec.shape[1], slice_rec.shape[0], 0)
+    )
     # ax.imshow(
     #     1 - outline_slice,
     #     cmap='gray',
@@ -135,6 +142,11 @@ for i in tqdm(range(num_slices)):
     #     origin='upper',
     #     extent=(0, slice_rec.shape[1], slice_rec.shape[0], 0)
     # )
-    ax.axis('off')
-    plt.savefig(os.path.join(recol_folder, f"slice_{i:03d}.png"), bbox_inches='tight', pad_inches=0, dpi=300)
+    ax.axis("off")
+    plt.savefig(
+        os.path.join(recol_folder, f"slice_{i:03d}.png"),
+        bbox_inches="tight",
+        pad_inches=0,
+        dpi=300,
+    )
     plt.close(fig)

@@ -15,13 +15,12 @@ from scipy.ndimage import zoom
 from skimage.segmentation import find_boundaries
 from scipy.ndimage import affine_transform
 from skimage.morphology import thin
+
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
 # annot = np.transpose(atlas.annotation, (2, 0, 1))[::-1, ::-1, ::-1]
 # raw_outline3d = find_boundaries(
 #                     annot,
 #                     mode="inner")
-   
-
 
 
 def calculate_affine(srcPoints, dstPoints):
@@ -31,6 +30,7 @@ def calculate_affine(srcPoints, dstPoints):
     # Solve the system of linear equations
     affine_matrix, _, _, _ = np.linalg.lstsq(srcPoints, dstPoints, rcond=None)
     return affine_matrix.T
+
 
 def read_ants_affine(aff_path):
     if not os.path.exists(aff_path):
@@ -42,13 +42,15 @@ def read_ants_affine(aff_path):
     affine_matrix = calculate_affine(before_points, after_points)
     return affine_matrix
 
+
 def pix_to_xyz(px, py, h, w, alignment):
     xfrac, yfrac = px / w, py / h
-    O, U, V      = alignment[:3], alignment[3:6], alignment[6:9]
-    offs_u       = xfrac[:, None] * U[None, :]
-    offs_v       = yfrac[:, None] * V[None, :]
-    pts          = O[None, :] + offs_u + offs_v
+    O, U, V = alignment[:3], alignment[3:6], alignment[6:9]
+    offs_u = xfrac[:, None] * U[None, :]
+    offs_v = yfrac[:, None] * V[None, :]
+    pts = O[None, :] + offs_u + offs_v
     return pts[:, 0], pts[:, 1], pts[:, 2]
+
 
 def apply_affine_to_points(affine_matrix, points):
     # pre‐shift into padded‐image coords
@@ -61,17 +63,19 @@ def apply_affine_to_points(affine_matrix, points):
 image_path = r"/home/harryc/github/spatial_brain_maps/paper_figures/validation_study/section_images/04-0180/thumbnails/101740229_s0220.jpg"
 affine_path = "/home/harryc/github/allen_quantifier/paper_figures/validation_study/raters/pipeline_registrations/affine/04-0180/276075/101740229_s0220_SyN_affineTransfo.mat"
 affine_matrix = read_ants_affine(affine_path)
-alignment = np.array([
-                -24.277802163804665,
-                214.49497780015713,
-                301.126115669702,
-                451.3549660173083,
-                -55.239040314140425,
-                103.31357540696513,
-                69.93112244075695,
-                44.368290926514135,
-                -360.28507216865376
-            ])
+alignment = np.array(
+    [
+        -24.277802163804665,
+        214.49497780015713,
+        301.126115669702,
+        451.3549660173083,
+        -55.239040314140425,
+        103.31357540696513,
+        69.93112244075695,
+        44.368290926514135,
+        -360.28507216865376,
+    ]
+)
 alignment[1] += 24
 align_width = int(np.linalg.norm(alignment[3:6])) + 1
 align_height = int(np.linalg.norm(alignment[6:])) + 1
@@ -81,7 +85,7 @@ image = cv2.resize(image, (int(image.shape[1] / 2.5), int(image.shape[0] / 2.5))
 outline = generate_target_slice(alignment, raw_outline3d)
 temp_image = cv2.resize(image, (outline.shape[1], outline.shape[0]))
 
-temp_image[outline!=0] = 0
+temp_image[outline != 0] = 0
 plt.imshow(temp_image)
 
 plt.show()
@@ -123,10 +127,10 @@ bottom_percent = pad_bottom / temp_image.shape[0]
 left_percent = pad_left / temp_image.shape[1]
 
 right_percent = pad_right / temp_image.shape[1]
-O -= U*left_percent
-O -= V*top_percent
-U += U*(right_percent + left_percent)
-V += V*(bottom_percent + top_percent)
+O -= U * left_percent
+O -= V * top_percent
+U += U * (right_percent + left_percent)
+V += V * (bottom_percent + top_percent)
 pad_alignment = [*O, *U, *V]
 temp_image = np.pad(
     temp_image,
@@ -136,6 +140,6 @@ temp_image = np.pad(
 )
 outline = generate_target_slice(pad_alignment, raw_outline3d)
 temp_image = cv2.resize(temp_image, (outline.shape[1], outline.shape[0]))
-temp_image[outline!=0] = 0
+temp_image[outline != 0] = 0
 plt.imshow(temp_image)
 plt.show()

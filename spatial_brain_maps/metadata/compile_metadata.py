@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 from utilities.api_utilities import fetch_data
 from tqdm import tqdm
+
 """
 This requests only 
 non failed data [failed$eqfalse]
@@ -81,7 +82,9 @@ for row in tqdm(api_data):
 
     # Retrieve section image metadata for this experiment.
     # We use the SectionDataSet endpoint (like in the second script) to include section_images.
-    section_url = f"http://api.brain-map.org/api/v2/data/SectionDataSet/{experiment_id}.json"
+    section_url = (
+        f"http://api.brain-map.org/api/v2/data/SectionDataSet/{experiment_id}.json"
+    )
     params = {"include": "section_images"}
     response = requests.get(section_url, params=params)
     if response.ok:
@@ -95,7 +98,7 @@ for row in tqdm(api_data):
             pixel_size = "Undefined"
     else:
         pixel_size = "Undefined"
-    
+
     data["pixel_size"].append(pixel_size)
 
 metadata = pd.DataFrame(data)
@@ -107,5 +110,3 @@ exclude = [2193, 1878, 633]
 metadata = metadata[~metadata["experiment_id"].isin(exclude)]
 metadata = metadata.reset_index(drop=True)
 metadata.to_csv("metadata.csv", index=None)
-
-

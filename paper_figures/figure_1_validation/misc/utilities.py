@@ -3,6 +3,7 @@ import math
 import matplotlib.pyplot as plt
 import cv2
 
+
 def generate_target_slice(ouv, atlas):
     """
     Generate a 2D slice from a 3D atlas based on orientation vectors.
@@ -53,9 +54,10 @@ def generate_target_slice(ouv, atlas):
     data_im = data.reshape((height, width))
     return data_im
 
+
 def plot_image_and_alignment(image, alignment, atlas):
     outline = generate_target_slice(alignment, atlas)
     temp_image = cv2.resize(image, (outline.shape[1], outline.shape[0]))
-    temp_image[outline!=0] = 0
+    temp_image[outline != 0] = 0
     plt.imshow(temp_image)
     plt.show()
