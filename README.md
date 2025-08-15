@@ -5,7 +5,7 @@ Spatial brain maps is a tool for viewing 3D gene expression in the Mouse brain. 
 
 ## Usage 
 There are many ways to interact with this package but the easiest entrypoint is the interactive search hosted at 
-https://neural-systems-at-uio.github.io/spatial_brain_maps/. This is integrated with Siibra so you can interactively search for genes which are up or down regulated in any given region, and explore those volumes of gene expression in 3D. 
+https://neural-systems-at-uio.github.io/spatial_brain_maps/. This is integrated with the Siibra explorer atlas viewer so you can interactively search for genes which are up or down regulated in any given region, and explore those volumes of gene expression in 3D. 
 ## Installation
 
 ### Clone
