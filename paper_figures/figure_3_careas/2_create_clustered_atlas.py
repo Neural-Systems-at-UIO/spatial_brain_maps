@@ -10,7 +10,7 @@ from sklearn.metrics import silhouette_score
 from brainglobe_atlasapi.bg_atlas import BrainGlobeAtlas
 from tqdm import tqdm
 # parameters
-cluster_list = [55, 1000, 2000, 4096, 32768]
+cluster_list = [1000, 2000, 4096, 32768]
 max_iter = 1000       # maximum number of k-means iterations
 n_init = 50           # how many times to run k-means with different centroid seeds
 sil_sample = 10000    # for large datasets, subsample for silhouette
