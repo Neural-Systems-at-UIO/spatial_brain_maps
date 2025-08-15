@@ -9,8 +9,6 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 # Write the version into the package at build time
 write_to = "spatial_brain_maps/_version.py"
-# Clean scheme ensures reproducible archives without git metadata
-clean = true
 
 [project]
 name = "spatial_brain_maps"
@@ -20,6 +18,7 @@ readme = "README.md"
 authors = [ { name = "Neural Systems @ UiO", email = "harry.carey@medisin.uio.no" } ]
 license = { text = "MIT" }
 requires-python = ">=3.8"
+dynamic = ["version"]
 keywords = ["neuroscience", "brain", "gene expression", "allen brain atlas", "neuroinformatics"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
