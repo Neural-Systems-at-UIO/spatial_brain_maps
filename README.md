@@ -70,7 +70,7 @@ This can be used alongside packages such as [brainglobe-atlasapi](https://github
 
 ## License
 
-Distributed under the terms of the MIT License (see `LICENSE`).
+Distributed under the terms of the MIT License  (see `LICENSE`).
 
 ## Acknowledgements
 
