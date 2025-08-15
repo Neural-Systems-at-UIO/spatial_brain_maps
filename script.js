@@ -53,27 +53,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 structureSelect.appendChild(option);
             });
 
-            setTimeout(() => {
-                $(structureSelect).select2({
-                    placeholder: "Search for a structure...",
-                    allowClear: false,
-                    width: '100%',
-                    dropdownAutoWidth: true,
-                    minimumResultsForSearch: 1,
-                    dropdownParent: $('.search-container')
-                });
-
-                $(structureSelect).on('change', async function () {
-                    await updateGeneMetrics();
-                });
-            }, 100);
-
-            if (structuresList.length > 0) {
-                setTimeout(() => {
-                    $(structureSelect).val(structuresList[0]).trigger('change');
-                    updateGeneMetrics();
-                }, 200);
-            }
+            // Initialize custom searchable dropdown for structure select
+            initCustomStructureSelect();
         } catch (error) {
             console.error('Error loading structures list:', error);
         }
@@ -199,10 +180,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedMetric = metricSelect.value;
         const isDescending = sortOrder.value === 'desc';
         const sortBy = document.querySelector('input[name="sortBy"]:checked').value;
-    
+
         filteredData.sort((a, b) => {
             let valA, valB;
-    
+
             if (sortBy === 'structure' && selectedStructure) {
                 valA = a[selectedMetric] || 0;
                 valB = b[selectedMetric] || 0;
@@ -210,39 +191,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 valA = a.number_of_animals;
                 valB = b.number_of_animals;
             }
-    
+
             return isDescending ? valB - valA : valA - valB;
         });
     }
     function displayResults() {
         console.log("Displaying results. Total:", filteredData.length);
-    
+
         resultsList.style.display = 'block';
         loadingIndicator.style.display = 'none';
         resultsList.innerHTML = '';
         resultCount.textContent = filteredData.length;
-    
+
         if (filteredData.length === 0) {
             resultsList.innerHTML = '<li class="result-item no-results">No matching genes found. Try a different search term.</li>';
             return;
         }
-    
+
         const startIndex = (currentPage - 1) * itemsPerPage;
         const paginatedItems = filteredData.slice(startIndex, startIndex + itemsPerPage);
         const selectedStructure = structureSelect.value;
         const isStructureSort = document.querySelector('input[name="sortBy"][value="structure"]').checked;
-    
+
         paginatedItems.forEach(gene => {
             const li = document.createElement('li');
             li.className = 'result-item';
             const filePath = `https://atlases.ebrains.eu/viewer-staging/#/a:juelich:iav:atlas:v1.0.0:2/t:minds:core:referencespace:v1.0.0:265d32a0-3d84-40a5-926f-bf89f68212b9/p:minds:core:parcellationatlas:v1.0.0:05655b58-3b6f-49db-b285-64b5a0276f83/x-overlay-layer:nifti:%2F%2Fhttps:%2F%2Fdata-proxy.ebrains.eu%2Fapi%2Fv1%2Fbuckets%2Fdeepslice%2Fexpression_volumes%2F${encodeURIComponent(gene.gene_name)}_interp_25um.nii.gz`;
-    
+
             // Format values
             const specificityValue = gene.specificity ? gene.specificity.toFixed(3) : 'N/A';
             const intensityValue = gene.intensity ? gene.intensity.toFixed(3) : 'N/A';
             const expressionPctValue = gene.expression_pct ? (gene.expression_pct * 100).toFixed(1) + '%' : 'N/A';
             const expressionSpecValue = gene.expression_specificity ? gene.expression_specificity.toFixed(3) : 'N/A';
-    
+
             li.innerHTML = `
                 <a href="${filePath}" target="_blank" class="result-link">
                     <div class="result-header">
@@ -298,22 +279,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </a>
             `;
-    
+
             // Toggle metrics visibility without affecting layout
             if (isStructureSort && selectedStructure) {
                 li.classList.add('show-metrics');
             } else {
                 li.classList.remove('show-metrics');
             }
-    
+
             resultsList.appendChild(li);
         });
-    
+
         addPaginationControls();
     }
     async function updateGeneMetrics() {
         const structure = structureSelect.value;
-        
+
         if (!structure) {
             fileData.forEach(gene => {
                 gene.specificity = 0;
@@ -329,9 +310,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             return;
         }
-        
+
         loadingIndicator.style.display = 'flex';
-        
+
         try {
             const [specificityData, intensityData, expressionPctData, expressionSpecData] = await Promise.all([
                 loadStructureData(structure, 'specificity'),
@@ -339,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadStructureData(structure, 'expression_pct'),
                 loadStructureData(structure, 'expression_specificity')
             ]);
-        
+
             // First pass to collect all values for ranking
             const allValues = {
                 specificity: [],
@@ -347,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 expression_pct: [],
                 expression_specificity: []
             };
-        
+
             fileData.forEach(gene => {
                 if (specificityData.hasOwnProperty(gene.gene_name)) {
                     allValues.specificity.push(specificityData[gene.gene_name] || 0);
@@ -356,13 +337,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     allValues.expression_specificity.push(expressionSpecData[gene.gene_name] || 0);
                 }
             });
-        
+
             // Create sorted arrays for each metric
             const sortedMetrics = {};
             Object.keys(allValues).forEach(metric => {
                 sortedMetrics[metric] = [...allValues[metric]].sort((a, b) => b - a); // Sort descending
             });
-        
+
             // Second pass to calculate overall score and store rankings
             fileData.forEach(gene => {
                 if (specificityData.hasOwnProperty(gene.gene_name)) {
@@ -370,32 +351,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     gene.intensity = intensityData[gene.gene_name] || 0;
                     gene.expression_pct = expressionPctData[gene.gene_name] || 0;
                     gene.expression_specificity = expressionSpecData[gene.gene_name] || 0;
-                    
+
                     // Calculate and store rankings for each metric
                     gene.specificityRank = sortedMetrics.specificity.indexOf(gene.specificity) + 1;
                     gene.intensityRank = sortedMetrics.intensity.indexOf(gene.intensity) + 1;
                     gene.expressionPctRank = sortedMetrics.expression_pct.indexOf(gene.expression_pct) + 1;
                     gene.expressionSpecRank = sortedMetrics.expression_specificity.indexOf(gene.expression_specificity) + 1;
-                    
+
                     // Calculate overall score with coverage weighted half as much
                     const weights = {
                         specificity: 1,
                         intensity: 0.005,
-                        expression_pct: 0.012,  
+                        expression_pct: 0.012,
                         expression_specificity: 1
                     };
-                    
+
                     const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
-                    
+
                     const weightedRanks = [
                         (gene.specificityRank / fileData.length) * weights.specificity,
                         (gene.intensityRank / fileData.length) * weights.intensity,
                         (gene.expressionPctRank / fileData.length) * weights.expression_pct,
                         (gene.expressionSpecRank / fileData.length) * weights.expression_specificity
                     ];
-                    
+
                     gene.overall = 1 - (weightedRanks.reduce((a, b) => a + b, 0) / totalWeight);
-                    
+
                     gene.inStructure = true;
                 } else {
                     gene.specificity = 0;
@@ -410,16 +391,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     gene.inStructure = false;
                 }
             });
-        
+
             searchFiles(searchInput.value);
         } catch (error) {
             console.error('Error updating gene metrics:', error);
         } finally {
             loadingIndicator.style.display = 'none';
         }
-    }        
-        
-        
+    }
+
+
     function searchFiles(query) {
         console.group("Search Execution");
         try {
@@ -510,8 +491,143 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // THEME TOGGLE
+    const themeToggle = document.getElementById('themeToggle');
+    const themeLabel = themeToggle ? themeToggle.querySelector('.theme-label') : null;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('sbm-theme');
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (themeLabel) { themeLabel.textContent = theme === 'dark' ? 'Light' : 'Dark'; }
+        if (themeToggle) { themeToggle.querySelector('i').className = theme === 'dark' ? 'fas fa-lightbulb' : 'fas fa-moon'; }
+        localStorage.setItem('sbm-theme', theme);
+        // No special handling needed for custom select; styles adjust via CSS vars.
+    }
+    applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    }
+
     // Initial load
     toggleStructureControls();
     loadStructuresList();
     loadFileData();
+
+    // -------- Custom Structure Select Implementation --------
+    function initCustomStructureSelect() {
+        // Prevent re-init
+        if (document.querySelector('.structure-select-wrapper')) return;
+        const select = structureSelect;
+        select.classList.add('visually-hidden');
+        const wrapper = document.createElement('div');
+        wrapper.className = 'structure-select-wrapper';
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'structure-select-trigger';
+        trigger.setAttribute('aria-haspopup', 'listbox');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.textContent = select.options[select.selectedIndex]?.textContent || 'Select a structure...';
+        const panel = document.createElement('div');
+        panel.className = 'structure-select-panel';
+        panel.setAttribute('role', 'listbox');
+        const searchWrap = document.createElement('div');
+        searchWrap.className = 'structure-select-searchwrap';
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.className = 'structure-select-search';
+        searchInput.placeholder = 'Search structures...';
+        searchWrap.appendChild(searchInput);
+        const list = document.createElement('ul');
+        list.className = 'structure-select-options';
+        panel.appendChild(searchWrap);
+        panel.appendChild(list);
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(panel);
+        select.parentNode.insertBefore(wrapper, select);
+
+        function buildOptions(filter = '') {
+            list.innerHTML = '';
+            const filterLower = filter.toLowerCase();
+            [...select.options].forEach(opt => {
+                if (opt.value === '') return; // skip placeholder
+                if (filter && !opt.textContent.toLowerCase().includes(filterLower)) return;
+                const li = document.createElement('li');
+                li.className = 'structure-option';
+                li.setAttribute('role', 'option');
+                li.dataset.value = opt.value;
+                li.textContent = opt.textContent;
+                if (opt.selected) li.classList.add('selected');
+                list.appendChild(li);
+            });
+            focusFirst();
+        }
+
+        function open() {
+            wrapper.classList.add('open');
+            trigger.setAttribute('aria-expanded', 'true');
+            buildOptions(searchInput.value.trim());
+            searchInput.focus();
+        }
+        function close() {
+            wrapper.classList.remove('open');
+            trigger.setAttribute('aria-expanded', 'false');
+        }
+        function selectValue(value) {
+            select.value = value;
+            trigger.textContent = select.options[select.selectedIndex].textContent;
+            select.dispatchEvent(new Event('change'));
+            close();
+        }
+        function focusFirst() {
+            const first = list.querySelector('.structure-option');
+            if (first) {
+                list.querySelectorAll('.focused').forEach(el => el.classList.remove('focused'));
+                first.classList.add('focused');
+            }
+        }
+        function move(delta) {
+            const items = [...list.querySelectorAll('.structure-option')];
+            if (!items.length) return;
+            let idx = items.findIndex(i => i.classList.contains('focused'));
+            if (idx === -1) idx = 0; else idx = (idx + delta + items.length) % items.length;
+            items.forEach(i => i.classList.remove('focused'));
+            items[idx].classList.add('focused');
+            items[idx].scrollIntoView({ block: 'nearest' });
+        }
+
+        trigger.addEventListener('click', () => {
+            if (wrapper.classList.contains('open')) close(); else open();
+        });
+        searchInput.addEventListener('input', () => buildOptions(searchInput.value.trim()));
+        list.addEventListener('click', e => {
+            const li = e.target.closest('.structure-option');
+            if (li) selectValue(li.dataset.value);
+        });
+        wrapper.addEventListener('keydown', e => {
+            if (!wrapper.classList.contains('open')) { if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } return; }
+            switch (e.key) {
+                case 'Escape': close(); trigger.focus(); break;
+                case 'ArrowDown': e.preventDefault(); move(1); break;
+                case 'ArrowUp': e.preventDefault(); move(-1); break;
+                case 'Enter': case ' ': {
+                    e.preventDefault();
+                    const focused = list.querySelector('.focused');
+                    if (focused) selectValue(focused.dataset.value);
+                    break;
+                }
+                case 'Home': e.preventDefault(); focusFirst(); break;
+            }
+        });
+        document.addEventListener('click', e => { if (!wrapper.contains(e.target)) close(); });
+
+        // initial placeholder selection
+        if (select.options.length > 1 && !select.value) {
+            select.value = select.options[1].value; // first real
+            trigger.textContent = select.options[select.selectedIndex].textContent;
+            select.dispatchEvent(new Event('change'));
+        }
+    }
 });

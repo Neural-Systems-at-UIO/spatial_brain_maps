@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spatial Brain Maps</title>
-    <link rel="stylesheet" href="style.css"><!-- Add this before Select2 -->
+    <link rel="stylesheet" href="style.css"><!-- Main stylesheet -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -14,10 +14,29 @@
 </head>
 
 <body>
+    <!-- Replaced previous <div class="page-top-links"> ... </div> with absolute container -->
+    <div class="top-right-links">
+        <div class="external-links">
+            <button id="themeToggle" class="ext-link theme-toggle" title="Toggle light / dark mode"
+                aria-label="Toggle theme">
+                <i class="fas fa-lightbulb"></i><span class="theme-label">Light</span>
+            </button>
+            <a class="ext-link github" href="https://github.com/USER/REPO" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i><span>GitHub Repository</span>
+            </a>
+            <a class="ext-link biorxiv" href="https://www.biorxiv.org/content/PLACEHOLDER" target="_blank"
+                rel="noopener">
+                <i class="fas fa-book-open"></i><span>bioRxiv Preprint</span>
+            </a>
+        </div>
+    </div>
     <div class="container">
-        <header>
-            <h1>Spatial Brain Maps</h1>
-            <p>Search for genes to see the spatial expression in the mouse brain</p>
+        <header class="site-header">
+            <div class="title-block">
+                <h1>Spatial Brain Maps</h1>
+                <p>Search for genes to see the spatial expression in the mouse brain</p>
+            </div>
+            <!-- external links removed from here -->
         </header>
         <div class="search-container">
             <div class="search-box">
@@ -68,7 +87,8 @@
                 <div id="metricsInfoBox" class="info-box">
                     <h4>Metric Definitions:</h4>
                     <ul>
-                        <li><strong>Overall:</strong> A weighted mean of the other metrics, focused mainly on specificity 
+                        <li><strong>Overall:</strong> A weighted mean of the other metrics, focused mainly on
+                            specificity
                             but with a small boost for genes with higher coverage and intensity.</li>
                         <li><strong>Coverage:</strong> The percentage of this structure where the gene is detectibly
                             expressed.</li>
@@ -97,4 +117,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
