@@ -106,6 +106,10 @@ def gene_to_volume(
         gv = gv / len(ids)
     if (not do_interpolation) & (missing_fill != 0):
         gv[fv == 0] = missing_fill
+
+    # reorient both to bg space before returning
+    gv = gv[::-1, ::-1, ::-1].transpose(1, 2, 0)
+    fv = fv[::-1, ::-1, ::-1].transpose(1, 2, 0)
     return (gv, fv) if return_frequencies else gv
 
 
