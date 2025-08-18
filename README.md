@@ -50,7 +50,7 @@ spatial_brain_maps volume --gene Cnp --mode expression --res 25 --interpolate --
 ```
 The above command produces this volume. ![a horizontal section through the Cnp gene volume. It is continous containing no gaps between sections](https://github.com/Neural-Systems-at-UIO/spatial_brain_maps/blob/main/examples/outputs/Cnp_horizontal.png?raw=true) Since the underlying experiments have each been interpolated before averaging the volume is smooth without obvious gaps. 
 ## Python API Examples
-We also provide a Python package which provides the same functionality
+We also provide a Python interface which provides the same functionality
 ### 1. Reconstructing volumes
 
 ```python
