@@ -63,6 +63,7 @@ vol = gene_to_volume('Adora2a', resolution=25)
 write_nifti(vol, resolution=25, output_path="outputs/exp71717640")
 ```
 This can be used alongside packages such as [brainglobe-atlasapi](https://github.com/brainglobe/brainatlas-api) for plotting and visualisation (see [examples/plot_with_brainglobe.py](examples/plot_with_brainglobe.py)) 
+
 ![A horizontal section through the Adora2 gene on top of a Nissl stained reference template.](https://github.com/Neural-Systems-at-UIO/spatial_brain_maps/blob/main/examples/outputs/Adora2a_horizontal.png?raw=true) 
 
 ### 2. Producing point clouds. 
