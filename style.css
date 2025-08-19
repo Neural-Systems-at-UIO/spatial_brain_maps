@@ -414,6 +414,27 @@ header.site-header p {
     position: relative
 }
 
+/* Unified style for metric and sort order selects to match custom structure trigger */
+select.styled-select {
+    background: linear-gradient(145deg, #1d2733, #141b23);
+    border: 1px solid #395064;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.05), 0 4px 10px -2px rgba(0,0,0,.5);
+    font-weight: 500;
+}
+select.styled-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color), var(--focus-ring);
+}
+[data-theme="light"] select.styled-select {
+    background: var(--bg-2);
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+}
+[data-theme="light"] select.styled-select:focus {
+    box-shadow: 0 0 0 1px var(--primary-color), var(--focus-ring);
+}
+
 /* Structure select styled via Select2: narrow trigger, wider dropdown */
 #structureSelect {
     min-width: 200px
@@ -445,6 +466,9 @@ header.site-header p {
     text-align: left;
     position: relative
 }
+
+/* Mini variant used in multi-region rows */
+.structure-select-wrapper.mini .structure-select-trigger { min-width: 240px; }
 
 .structure-select-trigger.disabled {
     background: var(--bg-3);
@@ -588,16 +612,23 @@ header.site-header p {
     line-height: 1.2
 }
 
+/* Hover / keyboard focus highlight */
 .structure-option:hover,
 .structure-option.focused {
     background: var(--primary-color);
-    color: #fff
+    color: #fff;
 }
-
+/* Selected state (when not currently hovered or focused) */
 .structure-option.selected {
     background: linear-gradient(120deg, var(--primary-color), var(--secondary-color));
     color: #fff;
-    font-weight: 600
+    font-weight: 600;
+}
+/* Remove duplicate blue bars: if selected item is hovered or focused, show only the hover/focus style (override gradient) */
+.structure-option.selected.hovering,
+.structure-option.selected.focused { /* class 'hovering' will be added via JS if needed */
+    background: var(--primary-color);
+    font-weight: 600;
 }
 
 [data-theme="light"] .structure-select-trigger {
@@ -623,7 +654,7 @@ header.site-header p {
 [data-theme="light"] .structure-option:hover,
 [data-theme="light"] .structure-option.focused {
     background: var(--primary-color);
-    color: #fff
+    color: #fff;
 }
 
 [data-theme="dark"] .select2-dropdown {
@@ -1286,3 +1317,66 @@ select[disabled] {
     clip: rect(0 0 0 0) !important;
     border: 0 !important
 }
+
+/* Multi-region search styles */
+.multi-region-inline { display:flex; flex-direction:column; gap:.55rem; }
+.region-criteria-inline { display:flex; flex-direction:column; gap:.45rem; }
+.region-criterion { display:flex; gap:.4rem; align-items:center; background:transparent; padding:0; border:0; position:relative; }
+.region-criterion .crit-label { font-size:.9rem; letter-spacing:.3px; font-weight:600; color:var(--text-dim); }
+.region-criterion select { padding:.55rem 2rem .55rem .85rem; border:1px solid #395064; border-radius:10px; font-size:.9rem; background:linear-gradient(145deg,#1d2733,#141b23); color:var(--text-color); min-width:200px; font-weight:500; height:40px; line-height:1.2; box-shadow:0 0 0 1px rgba(255,255,255,.05), 0 4px 10px -2px rgba(0,0,0,.5); }
+.region-criterion select option { background: var(--bg-2); color: var(--text-color); -webkit-text-fill-color: var(--text-color); }
+[data-theme="light"] .region-criterion select option { background: var(--bg-1); color: var(--text-color); }
+.region-criterion .remove-region { background:linear-gradient(145deg,#5a1f2f,#3a121d); border:1px solid #7d2d40; color:#ffb8c9; padding:.55rem .9rem; border-radius:10px; font-size:.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:.45rem; transition:var(--transition); height:40px; font-weight:600; letter-spacing:.4px; }
+.region-criterion .remove-region:hover { filter: brightness(1.18); }
+.add-region-btn { background:var(--gradient-accent); border:1px solid var(--secondary-color); color:#fff; font-weight:600; letter-spacing:.4px; padding:.55rem .9rem; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:.45rem; font-size:.75rem; box-shadow:0 2px 6px -2px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.05); transition:var(--transition); height:40px; align-self:flex-start; }
+.add-region-btn.small { height:40px; }
+.add-region-btn:hover { filter:brightness(1.15); }
+.avg-rank-badge { 
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); 
+    color: #fff; 
+    font-size: .65rem; 
+    padding: .25rem .6rem; 
+    border-radius: 6px; 
+    font-weight: 600; 
+    letter-spacing: .5px; 
+    margin-left: .5rem; 
+    display: inline-flex; 
+    align-items: center; 
+    flex: 0 0 auto; 
+    white-space: nowrap;
+}
+.criterion-rank-badge {
+    background: linear-gradient(135deg,#394d60,#263443); 
+    color: var(--text-color); 
+    font-size: .55rem; 
+    padding: .28rem .55rem; 
+    border-radius: 6px; 
+    font-weight: 600; 
+    letter-spacing: .4px; 
+    margin-left: .35rem; 
+    line-height: 1.15; 
+    display: inline-flex;
+    align-items: center;
+    flex: 0 1 auto;
+    max-width: 300px; 
+    white-space: normal; 
+    word-break: break-word;
+ }
+[data-theme="light"] .criterion-rank-badge { background: var(--bg-2); }
+
+/* Row container for multi-region badges placed beneath header */
+.multi-region-badges { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: .35rem; 
+    margin: 4px 0 6px; 
+}
+[data-theme="light"] .criterion-rank-badge { background: var(--bg-2); }
+.multi-region-active-hint { 
+    font-size: .65rem; 
+    color: var(--text-dim); 
+    margin-left: .4rem; 
+}
+[data-theme="light"] .region-criterion select { background:var(--bg-2); border:1px solid var(--border-color); }
+
+@media (max-width: 700px) { .multi-region-inline { flex-direction:column; } .region-criteria-inline { flex-direction:column; } .region-criterion { flex-wrap:wrap; } .region-criterion select { width:100%; min-width:0; } }

@@ -18,25 +18,46 @@ document.addEventListener('DOMContentLoaded', function () {
     let fileData = [];
     let structureData = {};
     let structuresList = [];
+    // Multi-region state
+    const multiRegionContainer = document.getElementById('multiRegionContainer'); // inline region criteria holder
+    const regionCriteriaList = document.getElementById('regionCriteriaList');
+    const addRegionBtn = document.getElementById('addRegionBtn');
+    let multiRegionCriteria = []; // {id, structure, metric(intensity|expression_pct), direction(desc|asc)}
+    let multiRegionCache = {}; // cache structure metric datasets { structure: { intensity: {}, expression_pct: {} } }
 
     // Toggle structure/metric controls based on sort selection
     function toggleStructureControls() {
         const isStructureSort = document.querySelector('input[name="sortBy"][value="structure"]').checked;
+        const isMultiRegion = document.querySelector('input[name="sortBy"][value="multi-region"]').checked;
         structureSelect.disabled = !isStructureSort;
         metricSelect.disabled = !isStructureSort;
         structureLabel.classList.toggle('disabled', !isStructureSort);
         metricLabel.classList.toggle('disabled', !isStructureSort);
-        // Reflect disabled state in custom structure select trigger if initialized
-        const customWrapper = document.querySelector('.structure-select-wrapper');
-        if (customWrapper) {
-            const trigger = customWrapper.querySelector('.structure-select-trigger');
+        const structureGroup = document.querySelector('[data-role="structure-group"]');
+        const metricGroup = document.querySelector('[data-role="metric-group"]');
+        const sortGroup = document.querySelector('[data-role="sort-group"]');
+        if (isMultiRegion) {
+            if (multiRegionContainer) multiRegionContainer.style.display = 'flex';
+            if (structureGroup) structureGroup.style.display = 'none';
+            if (metricGroup) metricGroup.style.display = 'none';
+            if (sortGroup) sortGroup.style.display = 'none';
+            if (!multiRegionCriteria.length) createRegionCriterionRow();
+        } else {
+            if (multiRegionContainer) multiRegionContainer.style.display = 'none';
+            if (structureGroup) structureGroup.style.display = '';
+            if (metricGroup) metricGroup.style.display = '';
+            if (sortGroup) sortGroup.style.display = '';
+        }
+        // Reflect disabled state ONLY in the main (single-structure) custom select, not the multi-region mini selects
+        const mainWrapper = document.querySelector('.structure-select-wrapper:not(.mini)');
+        if (mainWrapper) {
+            const trigger = mainWrapper.querySelector('.structure-select-trigger');
             if (trigger) {
                 if (!isStructureSort) {
                     trigger.classList.add('disabled');
                     trigger.setAttribute('aria-disabled', 'true');
                     trigger.tabIndex = -1;
-                    // Ensure panel is closed if disabling while open
-                    customWrapper.classList.remove('open');
+                    mainWrapper.classList.remove('open');
                     trigger.classList.add('has-disabled-tooltip');
                     const tip = "Select 'Sort by structure metrics' to enable";
                     trigger.setAttribute('data-disabled-tooltip', tip);
@@ -51,12 +72,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         }
+        // Always enable multi-region mini selects when in multi-region mode
+        if (isMultiRegion) {
+            document.querySelectorAll('.structure-select-wrapper.mini .structure-select-trigger').forEach(trig => {
+                trig.classList.remove('disabled','has-disabled-tooltip');
+                trig.removeAttribute('aria-disabled');
+                trig.removeAttribute('data-disabled-tooltip');
+                trig.removeAttribute('title');
+                trig.tabIndex = 0;
+            });
+        }
         // Tooltip for metric select as well
         if (!isStructureSort) {
             const tip = "Select 'Sort by structure metrics' to enable";
             metricSelect.setAttribute('title', tip);
         } else {
             metricSelect.removeAttribute('title');
+        }
+        if (!isMultiRegion) {
+            // Re-run standard sort if exiting multi-region mode
+            if (multiRegionCriteria.length) {
+                sortResults();
+                displayResults();
+            }
+        } else {
+            computeMultiRegionRanks();
         }
     }
 
@@ -87,6 +127,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Initialize custom searchable dropdown for structure select
             initCustomStructureSelect();
+
+            // Rebuild any existing multi-region criteria rows now that structures are available
+            rebuildMultiRegionCriteriaUI();
         } catch (error) {
             console.error('Error loading structures list:', error);
         }
@@ -213,6 +256,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const isDescending = sortOrder.value === 'desc';
         const sortBy = document.querySelector('input[name="sortBy"]:checked').value;
 
+        if (sortBy === 'multi-region') {
+            filteredData.sort((a, b) => {
+                const valA = a._multiRegionAvgRank || Infinity;
+                const valB = b._multiRegionAvgRank || Infinity;
+                // Lower average rank is better
+                return valA - valB;
+            });
+            return;
+        }
+
         filteredData.sort((a, b) => {
             let valA, valB;
 
@@ -244,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const paginatedItems = filteredData.slice(startIndex, startIndex + itemsPerPage);
         const selectedStructure = structureSelect.value;
         const isStructureSort = document.querySelector('input[name="sortBy"][value="structure"]').checked;
+    const isMultiRegion = document.querySelector('input[name="sortBy"][value="multi-region"]').checked;
 
         paginatedItems.forEach(gene => {
             const li = document.createElement('li');
@@ -317,6 +371,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 li.classList.add('show-metrics');
             } else {
                 li.classList.remove('show-metrics');
+            }
+
+            if (isMultiRegion) {
+                const header = li.querySelector('.result-header');
+                let badgesRow = li.querySelector('.multi-region-badges');
+                if (!badgesRow) {
+                    badgesRow = document.createElement('div');
+                    badgesRow.className = 'multi-region-badges';
+                    header.insertAdjacentElement('afterend', badgesRow);
+                }
+                // Clear previous
+                badgesRow.innerHTML = '';
+                // Avg rank first
+                const avgBadge = document.createElement('div');
+                avgBadge.className = 'avg-rank-badge';
+                const avg = gene._multiRegionAvgRank ? gene._multiRegionAvgRank.toFixed(1) : '—';
+                avgBadge.textContent = `Avg Rank ${avg}`;
+                avgBadge.title = 'Average of per-criterion ranks (lower is better)';
+                badgesRow.appendChild(avgBadge);
+
+                // Per-criterion badges after
+                if (Array.isArray(gene._multiRegionCriterionRanks)) {
+                    gene._multiRegionCriterionRanks.forEach(cr => {
+                        const cBadge = document.createElement('div');
+                        cBadge.className = 'criterion-rank-badge';
+                        const dirLabel = cr.direction === 'desc' ? 'high' : 'low';
+                        const polarity = cr.direction === 'desc' ? 'High' : 'Low';
+                        const rankTxt = cr.rank ? `Rank ${cr.rank}` : 'Rank —';
+                        cBadge.textContent = `${cr.structure}: ${dirLabel} ${cr.metricLabel.toLowerCase()} ${rankTxt}`;
+                        cBadge.title = `${cr.structure} • ${polarity} values preferred`;
+                        badgesRow.appendChild(cBadge);
+                    });
+                }
             }
 
             resultsList.appendChild(li);
@@ -548,6 +635,267 @@ document.addEventListener('DOMContentLoaded', function () {
     loadStructuresList();
     loadFileData();
 
+    // ------------- Multi-region logic -------------
+    function createRegionCriterionRow(initial = {}) {
+        const id = crypto.randomUUID();
+        const row = document.createElement('div');
+        row.className = 'region-criterion';
+        row.dataset.id = id;
+        // Native select (hidden) + custom trigger (reuse pattern) for structure
+        const structureSel = document.createElement('select');
+        structureSel.className = 'visually-hidden';
+        const placeholderOpt = document.createElement('option');
+        placeholderOpt.value = '';
+        placeholderOpt.textContent = 'Select a Structure...';
+        structureSel.appendChild(placeholderOpt);
+        structuresList.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; structureSel.appendChild(opt); });
+        structureSel.value = initial.structure || '';
+
+        const structureWrapper = document.createElement('div');
+        structureWrapper.className = 'structure-select-wrapper mini';
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'structure-select-trigger';
+        trigger.textContent = structureSel.value || 'Select a Structure...';
+        const panel = document.createElement('div');
+        panel.className = 'structure-select-panel';
+        const searchWrap = document.createElement('div');
+        searchWrap.className = 'structure-select-searchwrap';
+        const searchBox = document.createElement('input');
+        searchBox.type = 'text';
+        searchBox.className = 'structure-select-search';
+        searchBox.placeholder = 'Search...';
+        searchWrap.appendChild(searchBox);
+        const list = document.createElement('ul');
+        list.className = 'structure-select-options';
+        panel.appendChild(searchWrap); panel.appendChild(list);
+        structureWrapper.appendChild(trigger); structureWrapper.appendChild(panel); structureWrapper.appendChild(structureSel);
+
+        function buildOptions(filter='') {
+            list.innerHTML='';
+            const f = filter.toLowerCase();
+            [...structureSel.options].forEach(opt=>{ if(opt.value==='' ) return; if(filter && !opt.textContent.toLowerCase().includes(f)) return; const li=document.createElement('li'); li.className='structure-option'; li.dataset.value=opt.value; li.textContent=opt.textContent; if(opt.value===structureSel.value) li.classList.add('selected','focused'); list.appendChild(li); });
+        }
+        function open(){ structureWrapper.classList.add('open'); trigger.setAttribute('aria-expanded','true'); buildOptions(searchBox.value.trim()); searchBox.focus(); }
+        function close(){ structureWrapper.classList.remove('open'); trigger.setAttribute('aria-expanded','false'); }
+        function selectValue(val){ structureSel.value=val; trigger.textContent=val||'Structure'; updateCriterion(); close(); }
+        trigger.addEventListener('click',()=>{ structureWrapper.classList.contains('open')?close():open(); });
+        searchBox.addEventListener('input',()=>buildOptions(searchBox.value.trim()));
+        list.addEventListener('click',e=>{ const li=e.target.closest('.structure-option'); if(li) selectValue(li.dataset.value); });
+        document.addEventListener('click',e=>{ if(!structureWrapper.contains(e.target)) close(); });
+
+    const metricSel = document.createElement('select');
+    metricSel.classList.add('styled-select','mr-metric');
+        ['intensity','expression_pct'].forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m === 'intensity' ? 'Intensity' : 'Coverage';
+            metricSel.appendChild(opt);
+        });
+        metricSel.value = initial.metric || 'intensity';
+
+    const directionSel = document.createElement('select');
+    directionSel.classList.add('styled-select','mr-direction');
+    [{v:'desc',t:'High to Low'},{v:'asc',t:'Low to High'}].forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o.v;
+            opt.textContent = o.t;
+            directionSel.appendChild(opt);
+        });
+        directionSel.value = initial.direction || 'desc';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-region';
+        removeBtn.innerHTML = '<i class="fas fa-times"></i> Remove';
+        removeBtn.addEventListener('click', () => {
+            multiRegionCriteria = multiRegionCriteria.filter(c => c.id !== id);
+            row.remove();
+            computeMultiRegionRanks();
+            updateRemoveButtonsVisibility();
+        });
+
+        function updateCriterion(){
+            const crit = multiRegionCriteria.find(c=>c.id===id);
+            if(crit){ crit.structure=structureSel.value; crit.metric=metricSel.value; crit.direction=directionSel.value; }
+            computeMultiRegionRanks();
+            updateMultiRegionColumnWidths();
+        }
+        [metricSel, directionSel].forEach(sel=> sel.addEventListener('change', updateCriterion));
+
+    // Add inline labels
+    // Labels updated to mirror the single-structure controls ("Brain Structure", "Metric", "Sort Order")
+    const structLabel = document.createElement('span'); structLabel.className='crit-label'; structLabel.textContent='Brain Structure:';
+    const metricLabelEl = document.createElement('span'); metricLabelEl.className='crit-label'; metricLabelEl.textContent='Metric:';
+    const dirLabel = document.createElement('span'); dirLabel.className='crit-label'; dirLabel.textContent='Sort Order:';
+    row.appendChild(structLabel);
+    row.appendChild(structureWrapper);
+    row.appendChild(metricLabelEl);
+    row.appendChild(metricSel);
+    row.appendChild(dirLabel);
+    row.appendChild(directionSel);
+    row.appendChild(removeBtn);
+    if (regionCriteriaList) regionCriteriaList.appendChild(row);
+
+    multiRegionCriteria.push({ id, structure: structureSel.value, metric: metricSel.value, direction: directionSel.value });
+    updateMultiRegionColumnWidths();
+    updateRemoveButtonsVisibility();
+    }
+
+    // Rebuild existing criteria UI after structures list arrives (handles user switching early)
+    function rebuildMultiRegionCriteriaUI() {
+        if (!regionCriteriaList) return;
+        if (!structuresList.length) return; // nothing to populate yet
+        if (!multiRegionCriteria.length) return; // no criteria to rebuild
+        const snapshot = multiRegionCriteria.map(c => ({ ...c }));
+        regionCriteriaList.innerHTML = '';
+        multiRegionCriteria = [];
+        snapshot.forEach(c => createRegionCriterionRow(c));
+        computeMultiRegionRanks();
+        updateMultiRegionColumnWidths();
+    }
+
+    function updateRemoveButtonsVisibility() {
+        const buttons = document.querySelectorAll('.region-criterion .remove-region');
+        if (multiRegionCriteria.length <= 1) {
+            buttons.forEach(btn => btn.style.display = 'none');
+        } else {
+            buttons.forEach(btn => btn.style.display = 'inline-flex');
+        }
+    }
+
+    // Equalize widths of structure trigger, metric select, direction select across rows for alignment
+    function updateMultiRegionColumnWidths() {
+        const rows = Array.from(document.querySelectorAll('.region-criterion'));
+        if (!rows.length) return;
+        let wStruct = 0, wMetric = 0, wDir = 0;
+        // Reset to auto to measure natural widths
+        rows.forEach(r => {
+            const st = r.querySelector('.structure-select-wrapper .structure-select-trigger');
+            const ms = r.querySelector('select.mr-metric');
+            const ds = r.querySelector('select.mr-direction');
+            if (st) st.style.width = 'auto';
+            if (ms) ms.style.width = 'auto';
+            if (ds) ds.style.width = 'auto';
+        });
+        rows.forEach(r => {
+            const st = r.querySelector('.structure-select-wrapper .structure-select-trigger');
+            const ms = r.querySelector('select.mr-metric');
+            const ds = r.querySelector('select.mr-direction');
+            if (st) wStruct = Math.max(wStruct, st.offsetWidth);
+            if (ms) wMetric = Math.max(wMetric, ms.offsetWidth);
+            if (ds) wDir = Math.max(wDir, ds.offsetWidth);
+        });
+        rows.forEach(r => {
+            const st = r.querySelector('.structure-select-wrapper .structure-select-trigger');
+            const ms = r.querySelector('select.mr-metric');
+            const ds = r.querySelector('select.mr-direction');
+            if (st) st.style.width = wStruct + 'px';
+            if (ms) ms.style.width = wMetric + 'px';
+            if (ds) ds.style.width = wDir + 'px';
+        });
+    }
+
+    // Recalculate on window resize (debounced)
+    let mrWidthTO;
+    window.addEventListener('resize', () => {
+        clearTimeout(mrWidthTO);
+        mrWidthTO = setTimeout(updateMultiRegionColumnWidths, 120);
+    });
+
+    if (addRegionBtn) addRegionBtn.addEventListener('click', () => createRegionCriterionRow());
+
+    async function ensureStructureMetrics(structure) {
+        if (!structure) return null;
+        if (!multiRegionCache[structure]) {
+            multiRegionCache[structure] = {};
+        }
+        const needed = ['intensity','expression_pct'].filter(m => !multiRegionCache[structure][m]);
+        if (!needed.length) return multiRegionCache[structure];
+        try {
+            const loads = await Promise.all(needed.map(m => loadStructureData(structure, m)));
+            needed.forEach((m,i) => multiRegionCache[structure][m] = loads[i]);
+            return multiRegionCache[structure];
+        } catch (e) {
+            console.error('Failed loading multi-region metrics', structure, e);
+            return multiRegionCache[structure];
+        }
+    }
+
+    async function computeMultiRegionRanks() {
+        const active = multiRegionCriteria.filter(c => c.structure);
+        if (!document.querySelector('input[name="sortBy"][value="multi-region"]').checked) return; // not active
+        if (!active.length) {
+            filteredData = [...fileData];
+            filteredData.forEach(g => delete g._multiRegionAvgRank);
+            sortResults();
+            displayResults();
+            return;
+        }
+        loadingIndicator.style.display = 'flex';
+        try {
+            // Load needed structures
+            await Promise.all(active.map(c => ensureStructureMetrics(c.structure)));
+            // For each criterion, build rank map { gene -> rank }
+            const criterionRanks = [];
+            for (const crit of active) {
+                const dataset = multiRegionCache[crit.structure]?.[crit.metric] || {};
+                // Build sorted array of values (desc always for ranking by value high best) then adjust for direction
+                const entries = Object.entries(dataset);
+                if (!entries.length) continue;
+                // For coverage metric we might treat values naturally
+                // Sort descending by value so index+1 is rank for high-to-low preference
+                entries.sort((a,b) => b[1] - a[1]);
+                const rankMapHigh = new Map();
+                entries.forEach(([gene,val],idx) => rankMapHigh.set(gene, idx+1));
+                let rankMap;
+                if (crit.direction === 'desc') {
+                    rankMap = rankMapHigh; // high desirable
+                } else {
+                    // For low desirable, invert ranks: newRank = (N - originalRank + 1)
+                    const N = entries.length;
+                    rankMap = new Map();
+                    entries.forEach(([gene,_val],idx) => {
+                        const originalRank = idx+1;
+                        rankMap.set(gene, N - originalRank + 1);
+                    });
+                }
+                criterionRanks.push({ crit, rankMap });
+            }
+            // Compute average rank across criteria for each gene present in all criteria
+            filteredData = fileData.filter(gene => {
+                return criterionRanks.every(obj => obj.rankMap.has(gene.gene_name));
+            });
+            filteredData.forEach(g => {
+                const ranks = criterionRanks.map(obj => obj.rankMap.get(g.gene_name));
+                g._multiRegionAvgRank = ranks.reduce((a,b)=>a+b,0)/ranks.length;
+                g._multiRegionCriterionRanks = criterionRanks.map(obj => ({
+                    structure: obj.crit.structure,
+                    metric: obj.crit.metric,
+                    metricLabel: obj.crit.metric === 'intensity' ? 'Intensity' : 'Coverage',
+                    direction: obj.crit.direction,
+                    rank: obj.rankMap.get(g.gene_name)
+                }));
+            });
+            sortResults();
+            displayResults();
+        } catch (e) {
+            console.error('Error computing multi-region ranks', e);
+        } finally {
+            loadingIndicator.style.display = 'none';
+        }
+    }
+
+    // If user switches to multi-region mode and there are no criteria yet, add one automatically
+    const multiRegionRadio = document.querySelector('input[name="sortBy"][value="multi-region"]');
+    if (multiRegionRadio) {
+        multiRegionRadio.addEventListener('change', e => {
+            if (e.target.checked && !multiRegionCriteria.length) createRegionCriterionRow();
+            toggleStructureControls();
+            computeMultiRegionRanks();
+        });
+    }
+
     // -------- Custom Structure Select Implementation --------
     function initCustomStructureSelect() {
         // Prevent re-init
@@ -594,7 +942,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (opt.selected) li.classList.add('selected');
                 list.appendChild(li);
             });
-            focusFirst();
+            // Prefer focusing the currently selected option; fall back to first option.
+            const selectedLi = list.querySelector('.structure-option.selected');
+            const focusTarget = selectedLi || list.querySelector('.structure-option');
+            if (focusTarget) {
+                list.querySelectorAll('.focused').forEach(el => el.classList.remove('focused'));
+                focusTarget.classList.add('focused');
+            }
         }
 
         function open() {
@@ -657,12 +1011,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         document.addEventListener('click', e => { if (!wrapper.contains(e.target)) close(); });
 
-        // initial placeholder selection
-        if (select.options.length > 1 && !select.value) {
-            select.value = select.options[1].value; // first real
-            trigger.textContent = select.options[select.selectedIndex].textContent;
-            select.dispatchEvent(new Event('change'));
-        }
+    // Do NOT auto-select first real option; keep placeholder until user chooses
 
     // Ensure disabled state reflects current sort mode after initialization
     toggleStructureControls();

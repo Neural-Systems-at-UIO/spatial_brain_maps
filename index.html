@@ -50,17 +50,20 @@
                 <label>
                     <input type="radio" name="sortBy" value="structure"> Sort by structure metrics
                 </label>
+                <label>
+                    <input type="radio" name="sortBy" value="multi-region"> Multi-region search
+                </label>
             </div>
             <div class="filter-row">
-                <div class="filter-group">
+                <div class="filter-group" data-role="structure-group">
                     <label for="structureSelect" id="structureLabel">Brain Structure:</label>
                     <select id="structureSelect">
                         <!-- Options will be populated by JS -->
                     </select>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group" data-role="metric-group">
                     <label for="metricSelect" id="metricLabel">Metric:</label>
-                    <select id="metricSelect">
+                    <select id="metricSelect" class="styled-select">
                         <option value="overall">Overall</option>
                         <option value="expression_specificity">Specificity of Coverage</option>
                         <option value="expression_pct">Coverage</option>
@@ -68,12 +71,18 @@
                         <option value="intensity">Intensity</option>
                     </select>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group" data-role="sort-group">
                     <label for="sortOrder">Sort Order:</label>
-                    <select id="sortOrder">
-                        <option value="desc">Descending</option>
-                        <option value="asc">Ascending</option>
+                    <select id="sortOrder" class="styled-select">
+                        <option value="desc">High to Low</option>
+                        <option value="asc">Low to High</option>
                     </select>
+                </div>
+                
+                <!-- Inline multi-region builder (shown only in multi-region mode) -->
+                <div id="multiRegionContainer" class="multi-region-inline" style="display:none;">
+                    <div id="regionCriteriaList" class="region-criteria-inline"></div>
+                    <button id="addRegionBtn" type="button" class="add-region-btn small"><i class="fas fa-plus"></i> Add Region</button>
                 </div>
             </div>
             <div class="filter-options">
@@ -82,9 +91,17 @@
             </div>
             <div class="metrics-info">
                 <button id="metricsInfoButton" class="info-button">
-                    <i class="fas fa-info-circle"></i> About Metrics
+                    <i class="fas fa-info-circle"></i> About Metrics and Search
                 </button>
                 <div id="metricsInfoBox" class="info-box">
+                    <h4>Search Types:</h4>
+                    <ul>
+                        <li><strong>Sort by number of animals:</strong> Sort by how many experiments were used to create the average gene expression. The more experiments / animals the smoother the volume is</li>
+                        <li><strong>Sort by structure metrics:</strong> Allows you to select a single region and search for genes using any of the listed metrics.</li>
+                        <li><strong>Multi-region search:</strong> Allows you to select multiple regions. You are only able to search using intensity and coverage. An example of when this might be useful is if you want to find which genes are highly expressed in one region while being lowly expressed in another.</li>
+       
+
+                    </ul>
                     <h4>Metric Definitions:</h4>
                     <ul>
                         <li><strong>Overall:</strong> A weighted mean of the other metrics, focused mainly on
