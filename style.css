@@ -1379,4 +1379,30 @@ select[disabled] {
 }
 [data-theme="light"] .region-criterion select { background:var(--bg-2); border:1px solid var(--border-color); }
 
+/* Overall weights panel */
+#overallWeightsPanel { margin-top: 1rem; padding: 1rem 1.1rem 1.2rem; background: linear-gradient(145deg, var(--bg-2), var(--bg-1)); border:1px solid var(--border-color); border-radius: 14px; box-shadow: 0 4px 14px -4px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04); }
+#overallWeightsPanel .weights-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
+#overallWeightsPanel h4 { font-size:.95rem; letter-spacing:.4px; font-weight:600; margin:0; background:var(--gradient-accent); -webkit-background-clip:text; background-clip:text; color:transparent; }
+#overallWeightsPanel .weights-hint { font-size:.7rem; letter-spacing:.5px; color:var(--text-dim); margin:0 0 .8rem; line-height:1.3; }
+#overallWeightsPanel .weights-grid { display:grid; gap:.55rem .9rem; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); }
+#overallWeightsPanel .weight-row { display:flex; flex-direction:column; gap:.35rem; font-size:.72rem; font-weight:600; letter-spacing:.4px; color:var(--text-dim); background:linear-gradient(145deg,var(--bg-3),var(--bg-2)); padding:.7rem .75rem .65rem; border:1px solid var(--border-color); border-radius:10px; position:relative; }
+#overallWeightsPanel .weight-row:hover { box-shadow:0 0 0 1px var(--primary-color),0 4px 12px -4px rgba(0,0,0,.6); }
+#overallWeightsPanel .weight-controls { display:flex; align-items:center; gap:.65rem; }
+#overallWeightsPanel .weight-number { width:72px; padding:.35rem .45rem; border:1px solid var(--border-color); background:var(--bg-2); color:var(--text-color); border-radius:8px; font-size:.65rem; font-weight:600; letter-spacing:.4px; box-shadow:0 1px 2px rgba(0,0,0,.4); }
+#overallWeightsPanel .weight-number:focus { outline:none; border-color:var(--primary-color); box-shadow:var(--focus-ring); }
+[data-theme="light"] #overallWeightsPanel .weight-number { background:var(--bg-1); }
+#overallWeightsPanel input[type=range] { width:100%; appearance:none; height:6px; border-radius:4px; background:linear-gradient(90deg,var(--primary-color),var(--accent-color)); outline:none; margin-top:.2rem; }
+#overallWeightsPanel input[type=range]::-webkit-slider-thumb { appearance:none; width:16px; height:16px; border-radius:50%; background:var(--bg-1); border:2px solid var(--primary-color); box-shadow:0 0 0 2px var(--bg-1),0 2px 4px rgba(0,0,0,.6); cursor:pointer; transition:var(--transition); }
+#overallWeightsPanel input[type=range]::-webkit-slider-thumb:hover { filter:brightness(1.2); }
+[data-theme="light"] #overallWeightsPanel .weight-row { background:linear-gradient(145deg,var(--bg-1),var(--bg-2)); }
+[data-theme="light"] #overallWeightsPanel input[type=range]::-webkit-slider-thumb { background:var(--bg-0); }
+#overallWeightsPanel .weights-summary { margin-top:.75rem; font-size:.62rem; letter-spacing:.5px; color:var(--text-dim); font-weight:500; }
+.reset-weights-btn { background:linear-gradient(145deg,#2a3845,#1b242d); border:1px solid var(--border-color); color:var(--text-color); font-size:.65rem; font-weight:600; letter-spacing:.5px; padding:.5rem .75rem; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:.4rem; }
+.reset-weights-btn:hover { filter:brightness(1.15); }
+[data-theme="light"] .reset-weights-btn { background:linear-gradient(145deg,#f1f5fa,#e2e8f0); }
+#overallWeightsPanel.disabled { position:relative; }
+#overallWeightsPanel.disabled .weights-grid, #overallWeightsPanel.disabled .weights-summary, #overallWeightsPanel.disabled .reset-weights-btn { filter:grayscale(.85) opacity(.35); pointer-events:none; user-select:none; }
+#overallWeightsPanel .weights-disabled-msg { background:rgba(0,0,0,.35); border:1px solid var(--border-color); padding:.65rem .85rem; border-radius:10px; font-size:.7rem; letter-spacing:.45px; font-weight:600; color:var(--text-color); box-shadow:0 4px 12px -4px rgba(0,0,0,.55); margin:0 0 .75rem; display:flex; align-items:center; gap:.5rem; }
+[data-theme="light"] #overallWeightsPanel .weights-disabled-msg { background:rgba(255,255,255,.65); }
+
 @media (max-width: 700px) { .multi-region-inline { flex-direction:column; } .region-criteria-inline { flex-direction:column; } .region-criterion { flex-wrap:wrap; } .region-criterion select { width:100%; min-width:0; } }

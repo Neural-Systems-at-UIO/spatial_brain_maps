@@ -10,6 +10,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const sortOrder = document.getElementById('sortOrder');
     const structureLabel = document.getElementById('structureLabel');
     const metricLabel = document.getElementById('metricLabel');
+    // Overall weights UI elements
+    const overallWeightsPanel = document.getElementById('overallWeightsPanel');
+    const resetWeightsBtn = document.getElementById('resetWeightsBtn');
+    const weightsNormalizedSummary = document.getElementById('weightsNormalizedSummary');
+    const weightInputs = {
+        specificity: () => document.getElementById('w_specificity'),
+        intensity: () => document.getElementById('w_intensity'),
+        expression_pct: () => document.getElementById('w_expression_pct'),
+        expression_specificity: () => document.getElementById('w_expression_specificity')
+    };
+    const defaultWeights = { specificity: 1, intensity: 0.005, expression_pct: 0.012, expression_specificity: 1 };
+    let overallWeights = { ...defaultWeights };
 
     // Pagination variables
     const itemsPerPage = 10;
@@ -97,6 +109,29 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             computeMultiRegionRanks();
+        }
+
+        // Toggle overall weights panel visibility
+        if (overallWeightsPanel) {
+            if (isStructureSort && metricSelect.value === 'overall') {
+                overallWeightsPanel.style.display = 'block';
+            } else {
+                overallWeightsPanel.style.display = 'none';
+            }
+            updateOverallWeightsPanelState();
+        }
+    }
+
+    function updateOverallWeightsPanelState() {
+        if (!overallWeightsPanel || overallWeightsPanel.style.display === 'none') return;
+        const structureSelected = !!structureSelect.value;
+        const disabledMsg = document.getElementById('weightsDisabledMsg');
+        if (!structureSelected) {
+            overallWeightsPanel.classList.add('disabled');
+            if (disabledMsg) disabledMsg.style.display = 'block';
+        } else {
+            overallWeightsPanel.classList.remove('disabled');
+            if (disabledMsg) disabledMsg.style.display = 'none';
         }
     }
 
@@ -477,23 +512,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     gene.expressionPctRank = sortedMetrics.expression_pct.indexOf(gene.expression_pct) + 1;
                     gene.expressionSpecRank = sortedMetrics.expression_specificity.indexOf(gene.expression_specificity) + 1;
 
-                    // Calculate overall score with coverage weighted half as much
-                    const weights = {
-                        specificity: 1,
-                        intensity: 0.005,
-                        expression_pct: 0.012,
-                        expression_specificity: 1
-                    };
-
-                    const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
-
+                    // Calculate overall score using dynamic weights
+                    const totalWeight = Object.values(overallWeights).reduce((a, b) => a + b, 0) || 1;
                     const weightedRanks = [
-                        (gene.specificityRank / fileData.length) * weights.specificity,
-                        (gene.intensityRank / fileData.length) * weights.intensity,
-                        (gene.expressionPctRank / fileData.length) * weights.expression_pct,
-                        (gene.expressionSpecRank / fileData.length) * weights.expression_specificity
+                        (gene.specificityRank / fileData.length) * overallWeights.specificity,
+                        (gene.intensityRank / fileData.length) * overallWeights.intensity,
+                        (gene.expressionPctRank / fileData.length) * overallWeights.expression_pct,
+                        (gene.expressionSpecRank / fileData.length) * overallWeights.expression_specificity
                     ];
-
                     gene.overall = 1 - (weightedRanks.reduce((a, b) => a + b, 0) / totalWeight);
 
                     gene.inStructure = true;
@@ -516,6 +542,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error updating gene metrics:', error);
         } finally {
             loadingIndicator.style.display = 'none';
+            updateOverallWeightsPanelState();
         }
     }
 
@@ -578,13 +605,127 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ---- Dynamic Overall Weights Logic ----
+    function updateWeightValueLabels() {
+        if (!overallWeightsPanel) return;
+        Object.keys(weightInputs).forEach(k => {
+            const el = weightInputs[k] && weightInputs[k]();
+            if (!el) return;
+            const num = overallWeightsPanel.querySelector(`.weight-number[data-weight-number="${k}"]`);
+            if (num && num !== document.activeElement) num.value = el.value;
+        });
+        updateWeightsSummary();
+    }
+    function updateWeightsSummary() {
+        if (!weightsNormalizedSummary) return;
+        const total = Object.values(overallWeights).reduce((a,b)=>a+b,0) || 1;
+        const order = [
+            { key: 'expression_specificity', label: 'Specificity of Coverage' },
+            { key: 'specificity', label: 'Specificity of Intensity' },
+            { key: 'intensity', label: 'Intensity' },
+            { key: 'expression_pct', label: 'Coverage' }
+        ];
+        const norm = order.map(o => `${o.label}: ${(overallWeights[o.key]/total).toFixed(3)}`).join(' | ');
+        weightsNormalizedSummary.textContent = norm;
+    }
+    function readWeightsFromUI() {
+        Object.keys(overallWeights).forEach(k => {
+            const el = weightInputs[k] && weightInputs[k]();
+            if (el) {
+                let v = parseFloat(el.value);
+                if (isNaN(v) || v < 0) v = 0; else if (v > 1) v = 1;
+                overallWeights[k] = v;
+                el.value = v;
+                const num = overallWeightsPanel.querySelector(`.weight-number[data-weight-number="${k}"]`);
+                if (num && num !== document.activeElement) num.value = v;
+            }
+        });
+        updateWeightValueLabels();
+    }
+    function recomputeOverallScoresOnly() {
+        const totalWeight = Object.values(overallWeights).reduce((a,b)=>a+b,0) || 1;
+        fileData.forEach(gene => {
+            if (gene.specificityRank) {
+                const weightedRanks = [
+                    (gene.specificityRank / fileData.length) * overallWeights.specificity,
+                    (gene.intensityRank / fileData.length) * overallWeights.intensity,
+                    (gene.expressionPctRank / fileData.length) * overallWeights.expression_pct,
+                    (gene.expressionSpecRank / fileData.length) * overallWeights.expression_specificity
+                ];
+                gene.overall = 1 - (weightedRanks.reduce((a,b)=>a+b,0) / totalWeight);
+            }
+        });
+    }
+    function handleWeightsChange() {
+        readWeightsFromUI();
+        const isStructureSort = document.querySelector('input[name="sortBy"][value="structure"]').checked;
+        if (isStructureSort && metricSelect.value === 'overall') {
+            recomputeOverallScoresOnly();
+            sortResults();
+            displayResults();
+        }
+    }
+    if (overallWeightsPanel) {
+        Object.keys(weightInputs).forEach(k => {
+            const el = weightInputs[k] && weightInputs[k]();
+            if (el) el.addEventListener('input', handleWeightsChange);
+        });
+        // number inputs listeners
+        overallWeightsPanel.querySelectorAll('.weight-number').forEach(num => {
+            num.addEventListener('input', () => {
+                const key = num.getAttribute('data-weight-number');
+                const range = (weightInputs[key] && weightInputs[key]());
+                if (range) {
+                    let v = parseFloat(num.value);
+                    if (isNaN(v)) v = 0;
+                    if (v < 0) v = 0;
+                    if (v > 1) v = 1;
+                    // reflect clamp immediately
+                    num.value = v;
+                    range.value = v;
+                    handleWeightsChange();
+                }
+            });
+            num.addEventListener('blur', () => {
+                let v = parseFloat(num.value);
+                if (isNaN(v)) v = 0;
+                if (v < 0) v = 0;
+                if (v > 1) v = 1;
+                num.value = v;
+                const key = num.getAttribute('data-weight-number');
+                const range = (weightInputs[key] && weightInputs[key]());
+                if (range) range.value = v;
+                handleWeightsChange();
+            });
+        });
+        if (resetWeightsBtn) {
+            resetWeightsBtn.addEventListener('click', () => {
+                overallWeights = { ...defaultWeights };
+                Object.keys(weightInputs).forEach(k => {
+                    const el = weightInputs[k] && weightInputs[k]();
+                    if (el) el.value = defaultWeights[k];
+                    const num = overallWeightsPanel.querySelector(`.weight-number[data-weight-number="${k}"]`);
+                    if (num) num.value = defaultWeights[k];
+                });
+                handleWeightsChange();
+            });
+        }
+        updateWeightValueLabels();
+    }
+
     structureSelect.addEventListener('change', async () => {
         await updateGeneMetrics();
+    updateOverallWeightsPanelState();
     });
 
     metricSelect.addEventListener('change', () => {
         sortResults();
         displayResults();
+        if (overallWeightsPanel) {
+            const isStructureSort = document.querySelector('input[name="sortBy"][value="structure"]').checked;
+            overallWeightsPanel.style.display = (isStructureSort && metricSelect.value === 'overall') ? 'block' : 'none';
+            updateOverallWeightsPanelState();
+        }
     });
 
     sortOrder.addEventListener('change', () => {
