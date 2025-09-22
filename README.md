@@ -6,12 +6,6 @@ Spatial brain maps is a tool for viewing 3D gene expression in the Mouse brain. 
 ## Usage 
 While this package is focused on creating 3D volumes, if you wish to search the maps and make region based queries use our public search interface hosted at
 https://neural-systems-at-uio.github.io/spatial_brain_maps/. This is integrated with the Siibra explorer atlas viewer so you can interactively search for genes which are up or down regulated in any given region, and explore those volumes of gene expression in 3D. The Python package by contrast allows you to generate new volumes for any given gene at different resolutions, in addition to creating point clouds data. 
-## Installation
-
-```bash
-pip install spatial-brain-maps
-```
-you can view the PyPi package [here](https://pypi.org/project/spatial-brain-maps/) 
 
 
 ## Quick CLI Usage
