@@ -30,7 +30,7 @@ def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100
     """
     if offset_choices is None:
         # Small offsets to keep the new color similar to the original.
-        offset_choices = [-20, 20]
+        offset_choices = [-15,-14,-13,-12,-11 -10, 10, 11, 12, 13, 14, 15]
 
     for _ in range(max_tries):
         new_rgb = list(base_rgb)
@@ -39,6 +39,7 @@ def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100
         for idx in indices_to_change:
             offset = random.choice(offset_choices)
             new_rgb[idx] = int(np.clip(new_rgb[idx] + offset, 0, 255))
+
         new_rgb = tuple(new_rgb)
         if new_rgb != base_rgb and new_rgb not in taken:
             return new_rgb
@@ -106,14 +107,13 @@ import concurrent.futures
 def save_slice(i):
     # Extract the i-th slice for both volumes.
     # slice_og = og_rgb_volume[:, i]
-    slice_rec = recoloured_rgb_volume[:, i]
-    annot_slice = annotation[:, i]
+    slice_rec = recoloured_rgb_volume[:, i].copy()
     # outline_slice = find_boundaries(annot_slice, connectivity=2, mode='subpixel')
     # Set background to white
     # slice_og = slice_og.copy()
     # slice_og[slice_og == 0] = 255
-    slice_rec[slice_rec == 0] = 255
-
+    slice_rec[(slice_rec == 0).all(axis=-1)] = 255
+    
     # Make outline white voxels (==0) transparent
     # outline_mask = outline_slice > 0
 
@@ -152,10 +152,8 @@ def save_slice(i):
     )
     plt.close(fig)
 
-
 # Number of slices along the first dimension.
 num_slices = og_rgb_volume.shape[1]
 for i in tqdm(range(num_slices)):
     save_slice(i)
-# with concurrent.futures.ThreadPoolExecutor() as executor:
-#     list(tqdm(executor.map(save_slice, range(num_slices)), total=num_slices))
+

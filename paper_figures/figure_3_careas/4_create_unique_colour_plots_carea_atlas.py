@@ -127,7 +127,8 @@ os.makedirs(recol_folder, exist_ok=True)
 num_slices = colored_vol.shape[1]
 for i in tqdm(range(num_slices)):
     slice_rec = colored_vol[:, i]
-    slice_rec[slice_rec == 0] = 255
+    slice_rec[(slice_rec == 0).all(axis=-1)] = 255
+
     annot_slice = vol[:, i]
     # outline_slice = find_boundaries(annot_slice, connectivity=2, mode='subpixel')
     # outline_mask = outline_slice > 0

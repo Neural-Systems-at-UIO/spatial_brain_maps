@@ -12,9 +12,9 @@ from brainglobe_atlasapi.bg_atlas import BrainGlobeAtlas
 from tqdm import tqdm
 
 # parameters
-cluster_list = [1000, 2000, 4096, 32768]
+cluster_list = [32768]
 max_iter = 1000  # maximum number of k-means iterations
-n_init = 50  # how many times to run k-means with different centroid seeds
+n_init = 50  # default n_init for small cluster counts
 sil_sample = 10000  # for large datasets, subsample for silhouette
 files = glob(f"/mnt/g/outputs/pca/*.nrrd")
 
@@ -40,13 +40,24 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 
 # Stack into a single numpy array
 volumes = np.stack(volumes, axis=0)
-for n_clusters in cluster_list:
-    print(f"\nRunning full KMeans with k={n_clusters}")
+for n_clusters in cluster_list: 
+    # Use fewer initializations for large k
+    if n_clusters==32768:
+        curr_n_init = 1
+        cur_max_iter = 500
+    elif n_clusters >= 1000:
+        curr_n_init = 5
+        cur_max_iter = 1000
+    else:
+        curr_n_init = 50
+        cur_max_iter = 1000
+
+    print(f"\nRunning full KMeans with k={n_clusters}, n_init={curr_n_init}")
     km = KMeans(
         n_clusters=n_clusters,
         init="k-means++",
-        max_iter=max_iter,
-        n_init=n_init,
+        max_iter=cur_max_iter,
+        n_init=curr_n_init,
         random_state=42,
         verbose=0,
     )
@@ -59,6 +70,6 @@ for n_clusters in cluster_list:
     output = np.zeros_like(hemi_atlas)
     output[hemimask] = labels + 1
     nrrd.write(
-        f"/mnt/g/outputs/clusters/init_{n_init}_full_test_auto_{n_clusters}_regions.nrrd",
+        f"/mnt/g/outputs/clusters/init_{curr_n_init}_full_test_auto_{n_clusters}_regions.nrrd",
         output,
     )

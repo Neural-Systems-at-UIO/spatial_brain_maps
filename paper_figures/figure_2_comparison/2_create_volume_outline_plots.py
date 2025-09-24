@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 from skimage.morphology import thin
 from skimage.segmentation import find_boundaries
 from brainglobe_atlasapi.bg_atlas import BrainGlobeAtlas
+from matplotlib import colors
+from matplotlib.colorbar import ColorbarBase
+import matplotlib as mpl  # [ADD] ensure SVG preserves font as text
 
 # ─── user‐tweakable constants ──────────────────────────────────────────────────
 VOL_INDEX = 154
@@ -18,16 +21,20 @@ NRRD_AXES = (0, 2, 1)
 GENES_LIST = ["Cap1", "Cacna1g", "Satb1", "Heatr5b"]
 OUT_DIR = "datafiles"
 FIGURE_DIR = os.path.join("plots")
+SHOW_OUTLINES = False  # set to False to disable atlas outlines
 # ───────────────────────────────────────────────────────────────────────────────
-
+suffix = "" if SHOW_OUTLINES else "no_"
 # ensure output dirs exist
 os.makedirs(FIGURE_DIR, exist_ok=True)
+
+# [ADD] preserve fonts as text (don’t convert glyphs to paths) in SVG outputs
+mpl.rcParams["svg.fonttype"] = "none"
 
 
 def load_atlas(name="ccfv3augmented_mouse_10um"):
     atlas = BrainGlobeAtlas(name)
     annot = np.transpose(atlas.annotation, (2, 0, 1))[::-1, ::-1, ::-1]
-    outline = find_boundaries(annot, mode="inner", connectivity=annot.ndim)
+    outline = find_boundaries(annot, mode="inner", connectivity=annot.ndim) if SHOW_OUTLINES else None
     return annot, outline, atlas
 
 
@@ -54,34 +61,91 @@ def compute_extent(shape, voxel_size):
     return [0, shape[1] * voxel_size, 0, shape[0] * voxel_size]
 
 
+def colourbar_save_path(save_path: str) -> str:
+    """
+    Insert '_colourbar' before the file extension of save_path and force .svg.
+    Example: 'plots/foo.png' -> 'plots/foo_colourbar.svg'
+    """
+    root, _ = os.path.splitext(save_path)
+    return f"{root}_colourbar.svg"
+
+
+def save_colourbar(
+    cmap,
+    vmin,
+    vmax,
+    save_path,
+    orientation: str = "vertical",
+    dpi: int = 300,
+    tick_side: str = "right",  # 'left' or 'right' for vertical bars
+):
+    """
+    Save a standalone colourbar figure that matches the heatmap scaling.
+    tick_side controls whether ticks are drawn on the left or right for vertical bars.
+    """
+    fig_size = (0.6, 3.6) if orientation == "vertical" else (3.6, 0.6)
+    fig, ax = plt.subplots(figsize=fig_size)
+    norm = colors.Normalize(vmin=vmin, vmax=vmax)
+    cb = ColorbarBase(ax, cmap=plt.get_cmap(cmap), norm=norm, orientation=orientation)
+
+    # Ticks position: left for Allen volumes, right otherwise
+    if orientation == "vertical":
+        side = "left" if tick_side == "left" else "right"
+        cb.ax.yaxis.set_ticks_position(side)
+        cb.ax.yaxis.set_label_position(side)
+    else:
+        side = "bottom" if tick_side == "left" else "top"  # not used here, but supported
+
+    cb.ax.tick_params(labelsize=8)
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    print(f"  → Saving colourbar to {save_path}")
+    # Explicitly save as SVG to keep vector text
+    fig.savefig(save_path, bbox_inches="tight", format="svg", dpi=dpi)
+    plt.close(fig)
+
+
 def plot_outline(
     section, atlas_sec, sz_vol, sz_atlas, save_path, cmap="magma", vmax_ratio=0.7
 ):
+    # ensure the color limits used for the heatmap are also used for the colourbar
+    vmin = float(np.nanmin(section))
+    vmax = float(np.nanmax(section) * vmax_ratio)
+
     ext_vol = compute_extent(section.shape, sz_vol)
-    ext_atlas = compute_extent(atlas_sec.shape, sz_atlas)
     plt.figure(figsize=(12, 10))
     plt.imshow(
         section,
         cmap=cmap,
-        vmax=section.max() * vmax_ratio,
+        vmin=vmin,
+        vmax=vmax,
         extent=ext_vol,
         origin="lower",
     )
-    plt.contour(
-        atlas_sec,
-        levels=[0.5],
-        colors="white",
-        linewidths=0.8,
-        extent=ext_atlas,
-        alpha=0.8,
-    )
+    if SHOW_OUTLINES and atlas_sec is not None:
+        ext_atlas = compute_extent(atlas_sec.shape, sz_atlas)
+        plt.contour(
+            atlas_sec,
+            levels=[0.5],
+            colors="white",
+            linewidths=0.8,
+            extent=ext_atlas,
+            alpha=0.8,
+        )
     plt.axis("off")
     plt.tight_layout()
-    # save
+    # save main figure (kept as before)
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     print(f"  → Saving figure to {save_path}")
     plt.savefig(save_path)
     plt.close()
+
+    # save matching colourbar image next to the figure (SVG with preserved font)
+    cb_path = colourbar_save_path(save_path)
+    # Heuristic: files named like 'allen_*.png' are the Allen volumes → ticks on left
+    is_allen = os.path.basename(save_path).startswith("allen_")
+    tick_side = "left" if is_allen else "right"
+    save_colourbar(cmap=cmap, vmin=vmin, vmax=vmax, save_path=cb_path, tick_side=tick_side)
 
 
 def save_volume_nrrd(vol, path, spacings):
@@ -102,8 +166,8 @@ for gene in tqdm(GENES_LIST, desc="NIfTI → outline"):
     vol_path = os.path.join(OUT_DIR, "gene_volumes", f"{gene}.nii.gz")
     vol = load_nifti(vol_path)
     sec = extract_section(vol, VOL_INDEX, axis=0)
-    atlas_sec = thin(atlas_outline[int(VOL_INDEX * 2.5)])
-    save_path = os.path.join(FIGURE_DIR, f"{gene}_atlas_outline.png")
+    atlas_sec = thin(atlas_outline[int(VOL_INDEX * 2.5)]) if SHOW_OUTLINES else None
+    save_path = os.path.join(FIGURE_DIR, f"{gene}_atlas_{suffix}outline.png")
     plot_outline(
         sec,
         atlas_sec,
@@ -120,8 +184,8 @@ for gene in tqdm(GENES_LIST, desc="NRRD → outline"):
     vol_path = os.path.join(OUT_DIR, f"average_allen_{gene}.nrrd")
     vol = load_and_prepare_nrrd(vol_path)
     sec = extract_section(vol, VOL_INDEX // 8, axis=0)
-    atlas_sec = thin(atlas_outline[int(VOL_INDEX * 2.5)])
-    save_path = os.path.join(FIGURE_DIR, f"allen_{gene}_atlas_outline.png")
+    atlas_sec = thin(atlas_outline[int(VOL_INDEX * 2.5)]) if SHOW_OUTLINES else None
+    save_path = os.path.join(FIGURE_DIR, f"allen_{gene}_atlas_{suffix}outline.png")
     plot_outline(
         sec,
         atlas_sec,
@@ -148,8 +212,8 @@ save_volume_nrrd(plekh, plekh_path, spacings=[0.025, 0.025, 0.025])
 print("\n5) Plotting horizontal slice for Plekhg1")
 hidx = 180
 hsec = extract_section(plekh, hidx, axis=2)
-houtline = find_boundaries(atlas_annot[:, :, int(hidx * 2.5)])
-horiz_path = os.path.join("plots", "Plekhg1_horiz_outline.png")
+houtline = find_boundaries(atlas_annot[:, :, int(hidx * 2.5)]) if SHOW_OUTLINES else None
+horiz_path = os.path.join("plots", f"Plekhg1_horiz_{suffix}outline.png")
 plot_outline(
     hsec,
     houtline,
@@ -157,16 +221,19 @@ plot_outline(
     sz_atlas=TARGET_VOXEL_SIZE,
     save_path=horiz_path,
 )
+cidx = 262
 
 # 6) Example coronal slice plot for “Pitx2” (ID tree 470)
 print("\n6) Plotting coronal slice for Pitx2")
 pitx = load_nifti(os.path.join(OUT_DIR, "gene_volumes", "Pitx2.nii.gz"))
-cor_ids = list(atlas.hierarchy.expand_tree(470))
-cor_mask = np.isin(atlas_annot, cor_ids).astype(int) + (atlas_annot != 0).astype(int)
-cidx = 262
+if SHOW_OUTLINES:
+    cor_ids = list(atlas.hierarchy.expand_tree(470))
+    cor_mask = np.isin(atlas_annot, cor_ids).astype(int) + (atlas_annot != 0).astype(int)
+    coutline = find_boundaries(cor_mask[:, int(cidx * 2.5)])
+else:
+    coutline = None
 csec = extract_section(pitx, cidx, axis=1)
-coutline = find_boundaries(cor_mask[:, int(cidx * 2.5)])
-cor_path = os.path.join("plots", "Pitx2_cor_outline.png")
+cor_path = os.path.join("plots", f"Pitx2_cor_{suffix}outline.png")
 plot_outline(
     csec,
     coutline,
