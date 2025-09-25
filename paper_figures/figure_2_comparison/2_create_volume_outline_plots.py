@@ -21,7 +21,7 @@ NRRD_AXES = (0, 2, 1)
 GENES_LIST = ["Cap1", "Cacna1g", "Satb1", "Heatr5b"]
 OUT_DIR = "datafiles"
 FIGURE_DIR = os.path.join("plots")
-SHOW_OUTLINES = False  # set to False to disable atlas outlines
+SHOW_OUTLINES = True  # set to False to disable atlas outlines
 # ───────────────────────────────────────────────────────────────────────────────
 suffix = "" if SHOW_OUTLINES else "no_"
 # ensure output dirs exist
@@ -195,49 +195,189 @@ for gene in tqdm(GENES_LIST, desc="NRRD → outline"):
         vmax_ratio=1.0,
     )
 
-# 3) Save a mask of thalamic areas (ID 549)
+# 3) Save masks: thalamic areas (ID 549), whole brain, subthalamic nucleus (ID 470), olivary pretectal nucleus (ID 706)
 print("\n3) Saving thalamic areas mask (ID 549)")
 thal_ids = list(atlas.hierarchy.expand_tree(549))
 mask = np.isin(atlas_annot, thal_ids).astype(int) + (atlas_annot != 0).astype(int)
 mask_path = os.path.join("datafiles/thalamic_areas.nrrd")
 save_volume_nrrd(mask.astype(np.uint8), mask_path, spacings=[0.01, 0.01, 0.01])
 
-# 4) Export a single gene as NRRD
-print("\n4) Exporting Plekhg1 volume to NRRD")
+print("\n3b) Saving whole-brain mask (atlas_annot != 0)")
+brain_mask = (atlas_annot != 0).astype(np.uint8)
+brain_mask_path = os.path.join("datafiles/whole_brain_mask.nrrd")
+save_volume_nrrd(brain_mask, brain_mask_path, spacings=[0.01, 0.01, 0.01])
+
+print("\n3c) Saving subthalamic nucleus mask (ID 470)")
+stn_ids = list(atlas.hierarchy.expand_tree(470))
+stn_mask = np.isin(atlas_annot, stn_ids) + (atlas_annot != 0).astype(int)
+stn_path = os.path.join("datafiles/subthalamic_nucleus_mask.nrrd")
+save_volume_nrrd(stn_mask.astype(np.uint8), stn_path, spacings=[0.01, 0.01, 0.01])
+
+print("\n3d) Saving olivary pretectal nucleus mask (ID 706)")
+opn_ids = list(atlas.hierarchy.expand_tree(706))
+opn_mask = np.isin(atlas_annot, opn_ids).astype(np.uint8) + (atlas_annot != 0).astype(int)
+opn_path = os.path.join("datafiles/olivary_pretectal_nucleus_mask.nrrd")
+save_volume_nrrd(opn_mask.astype(np.uint8), opn_path, spacings=[0.01, 0.01, 0.01])
+
+# 4) Export selected genes as NRRD
+print("\n4) Exporting Plekhg1, Gal, and Pitx2 volumes to NRRD")
+
+# Plekhg1
 plekh = load_nifti(os.path.join(OUT_DIR, "gene_volumes", "Plekhg1.nii.gz"))
 plekh_path = os.path.join("datafiles/Plekhg1.nrrd")
 save_volume_nrrd(plekh, plekh_path, spacings=[0.025, 0.025, 0.025])
 
-# 5) Example horizontal slice plot for “Plekhg1”
-print("\n5) Plotting horizontal slice for Plekhg1")
-hidx = 180
-hsec = extract_section(plekh, hidx, axis=2)
-houtline = find_boundaries(atlas_annot[:, :, int(hidx * 2.5)]) if SHOW_OUTLINES else None
-horiz_path = os.path.join("plots", f"Plekhg1_horiz_{suffix}outline.png")
+# Gal
+gal = load_nifti(os.path.join(OUT_DIR, "gene_volumes", "Gal.nii.gz"))
+gal_path = os.path.join("datafiles/Gal.nrrd")
+save_volume_nrrd(gal, gal_path, spacings=[0.025, 0.025, 0.025])
+
+# Pitx2
+pitx = load_nifti(os.path.join(OUT_DIR, "gene_volumes", "Pitx2.nii.gz"))
+pitx_path = os.path.join("datafiles/Pitx2.nrrd")
+save_volume_nrrd(pitx, pitx_path, spacings=[0.025, 0.025, 0.025])
+
+# 5) Example coronal slice plot for “Plekhg1”
+print("\n5) Plotting coronal slice for Plekhg1")
+cor_idx = 262
+plekh_cor_sec = extract_section(plekh, cor_idx, axis=1)
+plekh_coutline = find_boundaries(atlas_annot[:, int(cor_idx * 2.5)]) if SHOW_OUTLINES else None
+plekh_cor_path = os.path.join("plots", f"Plekhg1_cor_{suffix}outline.png")
 plot_outline(
-    hsec,
-    houtline,
+    plekh_cor_sec,
+    plekh_coutline,
     sz_vol=OUR_VOXEL_SIZE,
     sz_atlas=TARGET_VOXEL_SIZE,
-    save_path=horiz_path,
+    save_path=plekh_cor_path,
 )
-cidx = 262
-
-# 6) Example coronal slice plot for “Pitx2” (ID tree 470)
-print("\n6) Plotting coronal slice for Pitx2")
-pitx = load_nifti(os.path.join(OUT_DIR, "gene_volumes", "Pitx2.nii.gz"))
+# Additional: coronal slice with ONLY thalamic areas (ID 549) outline
+print("5b) Plotting coronal slice for Plekhg1 with thalamic (ID 549) outline only")
 if SHOW_OUTLINES:
-    cor_ids = list(atlas.hierarchy.expand_tree(470))
-    cor_mask = np.isin(atlas_annot, cor_ids).astype(int) + (atlas_annot != 0).astype(int)
-    coutline = find_boundaries(cor_mask[:, int(cidx * 2.5)])
-else:
-    coutline = None
+    thal_ids = list(atlas.hierarchy.expand_tree(549))
+    thal_mask = np.isin(atlas_annot, thal_ids).astype(int)
+    plekh_thal_coutline = find_boundaries(thal_mask[:, int(cor_idx * 2.5)])
+    plekh_cor_thal_path = os.path.join("plots", f"Plekhg1_cor_thalamus_{suffix}outline.png")
+    plot_outline(
+        plekh_cor_sec,
+        plekh_thal_coutline,
+        sz_vol=OUR_VOXEL_SIZE,
+        sz_atlas=TARGET_VOXEL_SIZE,
+        save_path=plekh_cor_thal_path,
+    )
+
+# Additional: whole brain boundary
+print("5c) Plotting coronal slice for Plekhg1 with whole-brain boundary")
+if SHOW_OUTLINES:
+    brain_mask_slice = (atlas_annot != 0).astype(int)
+    plekh_brain_coutline = find_boundaries(brain_mask_slice[:, int(cor_idx * 2.5)])
+    plekh_cor_brain_path = os.path.join("plots", f"Plekhg1_cor_brain_{suffix}outline.png")
+    plot_outline(
+        plekh_cor_sec,
+        plekh_brain_coutline,
+        sz_vol=OUR_VOXEL_SIZE,
+        sz_atlas=TARGET_VOXEL_SIZE,
+        save_path=plekh_cor_brain_path,
+    )
+
+# Additional: both thalamic and whole-brain boundaries overlaid
+print("5d) Plotting coronal slice for Plekhg1 with thalamic + whole-brain boundaries")
+if SHOW_OUTLINES:
+    # Combine boundaries (logical OR) so both are drawn; color remains white in plot_outline
+    combined_coutline = (plekh_thal_coutline | plekh_brain_coutline).astype(int)
+    plekh_cor_thal_brain_path = os.path.join("plots", f"Plekhg1_cor_thalamus_brain_{suffix}outline.png")
+    plot_outline(
+        plekh_cor_sec,
+        combined_coutline,
+        sz_vol=OUR_VOXEL_SIZE,
+        sz_atlas=TARGET_VOXEL_SIZE,
+        save_path=plekh_cor_thal_brain_path,
+    )
+
+
+
+# 6) Example coronal slice plots for “Pitx2” (subthalamic nucleus ID tree 470)
+print("\n6) Plotting coronal slice for Pitx2 (subthalamic nucleus + full atlas outlines)")
+pitx = load_nifti(os.path.join(OUT_DIR, "gene_volumes", "Pitx2.nii.gz"))
+cidx = cor_idx  # reuse the same coronal index defined earlier (262)
 csec = extract_section(pitx, cidx, axis=1)
-cor_path = os.path.join("plots", f"Pitx2_cor_{suffix}outline.png")
+
+if SHOW_OUTLINES:
+    # Subthalamic nucleus only (ID 470)
+    stn_ids = list(atlas.hierarchy.expand_tree(470))
+    stn_mask = np.isin(atlas_annot, stn_ids).astype(int)
+    pitx_stn_coutline = find_boundaries(stn_mask[:, int(cidx * 2.5)])
+    # Full atlas boundaries
+    pitx_all_coutline = find_boundaries(atlas_annot[:, int(cidx * 2.5)])
+else:
+    pitx_stn_coutline = None
+    pitx_all_coutline = None
+
+# Plot: subthalamic nucleus + whole brain outline
+if SHOW_OUTLINES:
+    brain_mask_slice = (atlas_annot != 0).astype(int)
+    pitx_brain_coutline = find_boundaries(brain_mask_slice[:, int(cidx * 2.5)])
+    pitx_combined_coutline = (pitx_stn_coutline | pitx_brain_coutline).astype(int)
+else:
+    pitx_combined_coutline = None
+
+pitx_stn_path = os.path.join("plots", f"Pitx2_cor_subthalamic_brain_{suffix}outline.png")
 plot_outline(
     csec,
-    coutline,
+    pitx_combined_coutline,
     sz_vol=OUR_VOXEL_SIZE,
     sz_atlas=TARGET_VOXEL_SIZE,
-    save_path=cor_path,
+    save_path=pitx_stn_path,
 )
+
+# Plot: full atlas boundaries
+pitx_all_path = os.path.join("plots", f"Pitx2_cor_atlas_{suffix}outline.png")
+plot_outline(
+    csec,
+    pitx_all_coutline,
+    sz_vol=OUR_VOXEL_SIZE,
+    sz_atlas=TARGET_VOXEL_SIZE,
+    save_path=pitx_all_path,
+)
+
+# 6b) Same two plots for “Gal” (olivary pretectal nucleus + whole brain + full atlas outlines)
+print("\n6b) Plotting coronal slice for Gal (olivary pretectal nucleus + whole brain + full atlas outlines)")
+gal = load_nifti(os.path.join(OUT_DIR, "gene_volumes", "Gal.nii.gz"))
+cidx = 241
+gsec = extract_section(gal, cidx , axis=1)
+
+if SHOW_OUTLINES:
+    # Olivary pretectal nucleus (ID 706)
+    opn_ids = list(atlas.hierarchy.expand_tree(706))
+    opn_mask = np.isin(atlas_annot, opn_ids).astype(int)
+    gal_opn_coutline = find_boundaries(opn_mask[:, int(cidx * 2.5)])
+    # Whole brain outer boundary
+    brain_mask_slice = (atlas_annot != 0).astype(int)
+    gal_brain_coutline = find_boundaries(brain_mask_slice[:, int(cidx * 2.5)])
+    gal_combined_coutline = (gal_opn_coutline | gal_brain_coutline).astype(int)
+    # Full atlas boundaries
+    gal_all_coutline = find_boundaries(atlas_annot[:, int(cidx * 2.5)])
+else:
+    gal_combined_coutline = None
+    gal_all_coutline = None
+
+# Plot: olivary pretectal nucleus + whole brain outline
+gal_opn_path = os.path.join("plots", f"Gal_cor_olivary_pretectal_brain_{suffix}outline.png")
+plot_outline(
+    gsec,
+    gal_combined_coutline,
+    sz_vol=OUR_VOXEL_SIZE,
+    sz_atlas=TARGET_VOXEL_SIZE,
+    save_path=gal_opn_path,
+)
+
+# Plot: full atlas boundaries
+gal_all_path = os.path.join("plots", f"Gal_cor_atlas_{suffix}outline.png")
+plot_outline(
+    gsec,
+    gal_all_coutline,
+    sz_vol=OUR_VOXEL_SIZE,
+    sz_atlas=TARGET_VOXEL_SIZE,
+    save_path=gal_all_path,
+)
+
+
