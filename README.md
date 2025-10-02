@@ -10,7 +10,7 @@ https://neural-systems-at-uio.github.io/spatial_brain_maps/. This is integrated 
 
 
 ```python
-from spatial_brain_maps import gene_to_volume, write_nifti
+from generate_gene_data import gene_to_volume, write_nifti
 
 # 1. Single experiment volume (returns a numpy array)
 vol = gene_to_volume('Adora2a', resolution=25)
