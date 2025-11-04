@@ -42,7 +42,8 @@ dependencies = [
   "tqdm",
   "pynrrd",
   "scipy",
-  "nibabel"
+  "nibabel",
+  "kneed"
 ]
 
 [project.scripts]

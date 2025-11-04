@@ -9,8 +9,9 @@ import json
 from skimage.morphology import thin
 from skimage.transform import rescale
 from skimage.transform import resize
-
-np.random.seed(42)
+##Note in the figure from the paper a seed of 42 was used for all slices except 286, and 379.
+##This was so it was easy to differentiate the Caudoputamen and accumbens
+np.random.seed(41)
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
 annotation = atlas.annotation  # original label volume
 # Uncomment or adjust the following line if you require a specific orientation.
@@ -113,7 +114,7 @@ def save_slice(i):
     # slice_og = slice_og.copy()
     # slice_og[slice_og == 0] = 255
     slice_rec[(slice_rec == 0).all(axis=-1)] = 255
-    
+
     # Make outline white voxels (==0) transparent
     # outline_mask = outline_slice > 0
 
@@ -151,6 +152,8 @@ def save_slice(i):
         dpi=300,
     )
     plt.close(fig)
+
+
 
 # Number of slices along the first dimension.
 num_slices = og_rgb_volume.shape[1]
