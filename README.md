@@ -33,6 +33,7 @@ Distributed under the terms of the MIT License  (see `LICENSE`).
 
 - Allen Institute for Brain Science for raw ISH data, segmentations, and the Common Coordinate Framework.
 
+- These tools were developed with support from the EBRAINS infrastructure, and funding from the European Union’s Horizon 2020 Framework Programme for Research and Innovation under the Framework Partnership Agreement No. 650003 (HBP FPA).
 
 ---
 
