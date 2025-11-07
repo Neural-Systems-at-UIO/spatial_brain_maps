@@ -185,7 +185,7 @@ if ks.size:
 fig, axes = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
 
 axes[0].plot(ks, explained_vars, marker="o")
-axes[0].set_ylabel("Explained var")
+axes[0].set_ylabel("Explained variance")
 axes[0].grid(True, linestyle="--", alpha=0.3)
 
 explained_elbow = estimate_elbow(ks, explained_vars, increasing=True, curve="concave")
@@ -224,7 +224,7 @@ if silhouette_elbow is not None:
 
 
 
-plt.suptitle("KMeans metrics vs k (subsampled voxels)")
+plt.suptitle("KMeans metrics vs cluster number")
 plt.tight_layout()
 
 # Save to SVG
