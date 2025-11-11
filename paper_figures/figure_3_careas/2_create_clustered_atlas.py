@@ -40,9 +40,9 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 
 # Stack into a single numpy array
 volumes = np.stack(volumes, axis=0)
-for n_clusters in cluster_list: 
+for n_clusters in cluster_list:
     # Use fewer initializations for large k
-    if n_clusters==32768:
+    if n_clusters == 32768:
         curr_n_init = 1
         cur_max_iter = 500
     elif n_clusters >= 1000:

@@ -50,7 +50,7 @@ def read_image(experiment_id, filename, target_resolution, mode, image_folder=No
         img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
 
     if img is None:
-        return None
+        raise (f"image path {img_path} not found")
 
     # scale to target_resolution
     scale = pix_sz / target_resolution

@@ -28,7 +28,7 @@ def id_to_volume(
     return_frequencies=False,
     missing_fill=np.nan,
     do_interpolation=False,
-    k=5
+    k=5,
 ):
 
     aff = os.path.join(reg_folder, "affine_registration_files")
@@ -66,7 +66,7 @@ def id_to_volume(
     if missing_fill != 0:
         gv[fv == 0] = missing_fill
     if do_interpolation:
-        vol = interpolate(gv, fv, k=k, resolution=resolution)
+        gv = interpolate(gv, fv, k=k, resolution=resolution)
     return (gv, fv) if return_frequencies else gv
 
 
@@ -98,8 +98,8 @@ def gene_to_volume(
             mode=mode,
             return_frequencies=True,
             missing_fill=0,
-            do_interpolation = do_interpolation,
-            k=k
+            do_interpolation=do_interpolation,
+            k=k,
         )
 
         gv = gv + vol
@@ -119,21 +119,28 @@ def gene_to_volume(
 
 
 def interpolate(gv, fv, k, resolution):
-    atlas = brainglobe_atlasapi.BrainGlobeAtlas("ccfv3augmented_mouse_10um").annotation
+    if resolution < 25:
+        atlas = brainglobe_atlasapi.BrainGlobeAtlas(
+            "ccfv3augmented_mouse_10um"
+        ).annotation
+        atlas_res = 10
+    else:
+        atlas = brainglobe_atlasapi.BrainGlobeAtlas(
+            "ccfv3augmented_mouse_25um"
+        ).annotation
+        atlas_res = 25
     atlas = np.transpose(atlas, [2, 0, 1])[::-1, ::-1, ::-1]
     atlas_sh = np.array(atlas.shape)
-    tgt_sh = atlas_sh * (10 / resolution)
+    tgt_sh = atlas_sh * (atlas_res / resolution)
     sf = tgt_sh / atlas_sh
     at = zoom(atlas, sf, order=0)
     mask, valid = at != 0, fv != 0
-    fit, fill = mask & valid, mask & ~valid
+    fit = mask & valid
     grid = np.mgrid[0 : tgt_sh[0], 0 : tgt_sh[1], 0 : tgt_sh[2]]
     pts = grid.reshape((3, -1)).T
     nn1 = NearestNDInterpolator(pts[fit.flatten()], gv[fit])
-    out = gv.copy()
-    out[fill] = nn1(pts[fill.flatten()], k=k)
-    nn2 = NearestNDInterpolator(pts[fill.flatten()], out[fill])
-    out[fit] = nn2(pts[fit.flatten()], k=k)
+    out = np.zeros_like(gv)
+    out[mask] = nn1(pts[mask.flatten()], k=k)
     return out
 
 

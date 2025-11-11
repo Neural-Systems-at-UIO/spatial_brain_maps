@@ -2,6 +2,7 @@ __version__ = "0.1.0"
 
 from .points import id_to_points, gene_to_points
 from .volume import id_to_volume, gene_to_volume, interpolate, write_nifti
+from . import utilities
 
 __all__ = [
     "id_to_points",
@@ -10,4 +11,5 @@ __all__ = [
     "gene_to_volume",
     "interpolate",
     "write_nifti",
+    "utilities",
 ]

@@ -9,6 +9,7 @@ import json
 from skimage.morphology import thin
 from skimage.transform import rescale
 from skimage.transform import resize
+
 ##Note in the figure from the paper a seed of 42 was used for all slices except 286, and 379.
 ##This was so it was easy to differentiate the Caudoputamen and accumbens
 np.random.seed(41)
@@ -31,7 +32,7 @@ def make_color_unique_random(base_rgb, taken, offset_choices=None, max_tries=100
     """
     if offset_choices is None:
         # Small offsets to keep the new color similar to the original.
-        offset_choices = [-15,-14,-13,-12,-11 -10, 10, 11, 12, 13, 14, 15]
+        offset_choices = [-15, -14, -13, -12, -11 - 10, 10, 11, 12, 13, 14, 15]
 
     for _ in range(max_tries):
         new_rgb = list(base_rgb)
@@ -154,9 +155,7 @@ def save_slice(i):
     plt.close(fig)
 
 
-
 # Number of slices along the first dimension.
 num_slices = og_rgb_volume.shape[1]
 for i in tqdm(range(num_slices)):
     save_slice(i)
-

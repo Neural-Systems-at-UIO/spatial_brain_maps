@@ -6,6 +6,39 @@ import math
 np.seterr(divide="ignore", invalid="ignore")
 
 
+def _safe_divide(numerator, denominator):
+    numerator = float(numerator)
+    denominator = float(denominator)
+    if denominator == 0.0:
+        if numerator == 0.0:
+            return np.nan
+        return np.inf if numerator > 0.0 else -np.inf
+    return numerator / denominator
+
+
+def _compute_plane_intersections(cross, k, translated_volume):
+    """Compute axis-aligned intersection coordinates for a plane."""
+    cor_linear_point = (
+        ((translated_volume[0] / 2) * cross[0])
+        + ((translated_volume[2] / 2) * cross[2])
+    ) + k
+    cor_y = -_safe_divide(cor_linear_point, cross[1])
+
+    sag_linear_point = (
+        ((translated_volume[1] / 2) * cross[1])
+        + ((translated_volume[2] / 2) * cross[2])
+    ) + k
+    sag_x = -_safe_divide(sag_linear_point, cross[0])
+
+    horz_linear_point = (
+        ((translated_volume[0] / 2) * cross[0])
+        + ((translated_volume[1] / 2) * cross[1])
+    ) + k
+    horz_z = -_safe_divide(horz_linear_point, cross[2])
+
+    return cor_y, sag_x, horz_z
+
+
 def find_plane_equation(plane):
     """
     Finds the plane equation of a plane
@@ -130,26 +163,7 @@ def get_axis(m, translation_vector, direction, plane_of_section=None, atlas="AMB
 
     translated_volume = volume - translation_vector
 
-    cor_linear_point = (
-        (((translated_volume[0] / 2)) * cross[0])
-        + ((translated_volume[2] / 2) * cross[2])
-    ) + k
-    cor_Y = -(cor_linear_point / cross[1])
-    #     cor_axis = ((translated_volume[0] / 2, depth, translated_volume[2] / 2))
-
-    sag_linear_point = (
-        ((translated_volume[1] / 2) * cross[1])
-        + ((translated_volume[2] / 2) * cross[2])
-    ) + k
-    sag_X = -(sag_linear_point / cross[0])
-    #     sag_axis = ((translated_volume[1] / 2, depth, translated_volume[2] / 2))
-
-    horz_linear_point = (
-        ((translated_volume[0] / 2) * cross[0])
-        + ((translated_volume[1] / 2) * cross[1])
-    ) + k
-    # supress divide by zero warning
-    horz_Z = -(horz_linear_point / cross[2])
+    cor_Y, sag_X, horz_Z = _compute_plane_intersections(cross, k, translated_volume)
     if plane_of_section is None:
         plane_of_section = np.argmin(
             np.abs((cor_Y - posy, sag_X - posx, horz_Z - posz))
@@ -231,10 +245,6 @@ def rotate_section(section, degrees, direction, plane_of_section=None, atlas="AM
     """
 
     cross, k = find_plane_equation(section)
-
-    # this looks redundant
-    # if direction==ML:
-    #   ML=get_angle(section.reshape(9),cross,k,direction=direction)
     section_points = section.copy()
     for i in range(3):
         section_points[i + 3] += section_points[i]
@@ -248,36 +258,15 @@ def rotate_section(section, degrees, direction, plane_of_section=None, atlas="AM
         translated_volume = np.array((528, 320, 456))
         posx, posy, posz = translated_volume / 2
 
-    cor_linear_point = (
-        (((translated_volume[0] / 2)) * cross[0])
-        + ((translated_volume[2] / 2) * cross[2])
-    ) + k
-    cor_Y = -(cor_linear_point / cross[1])
-    #     cor_axis = ((translated_volume[0] / 2, depth, translated_volume[2] / 2))
 
-    sag_linear_point = (
-        ((translated_volume[1] / 2) * cross[1])
-        + ((translated_volume[2] / 2) * cross[2])
-    ) + k
-    sag_X = -(sag_linear_point / cross[0])
-    #     sag_axis = ((translated_volume[1] / 2, depth, translated_volume[2] / 2))
 
-    horz_linear_point = (
-        ((translated_volume[0] / 2) * cross[0])
-        + ((translated_volume[1] / 2) * cross[1])
-    ) + k
-    horz_Z = -(horz_linear_point / cross[2])
+    cor_Y, sag_X, horz_Z = _compute_plane_intersections(cross, k, translated_volume)
     if plane_of_section is None:
         plane_of_section = np.argmin(
             np.abs((cor_Y - posy, sag_X - posx, horz_Z - posz))
         )
-    #     midpoint = translated_volume/2
-    #     x = symbols('x')
-    #     expr = sum((x * cross + midpoint) * cross) - k
-    #     m = solve(expr)
-    #     translation_vector = np.array((m * cross + midpoint), dtype=np.float)
-    if plane_of_section == 0:
 
+    if plane_of_section == 0:
         translation_vector = (translated_volume[0] / 2, cor_Y, translated_volume[2] / 2)
 
     if plane_of_section == 1:

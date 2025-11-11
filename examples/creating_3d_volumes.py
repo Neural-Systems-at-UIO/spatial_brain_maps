@@ -3,7 +3,11 @@ This script shows how the 3D volumes of interpolated gene expression were create
 This is mostly useful for replicating the EBRAINs dataset.
 """
 
-import spatial_brain_maps as sbm
+# these lines are for the debugger
+import sys, pathlib
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+import generate_gene_data as ggd
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -11,33 +15,42 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 If you would like to locally store the image data as below you can refer to the code at:
 https://github.com/PolarBean/allen_download_utilities
 """
-image_folder = "/mnt/g/AllenDataalignmentProj/resolutionPixelSizeMetadata/ISH/"
+IMAGE_FOLDER = "/mnt/e/AllenDataalignmentProj/resolutionPixelSizeMetadata/ISH/"
 """
 The reg data can be sourced from the EBRAINS dataset at:
 """
-reg_folder = "/mnt/g/Allen_Realignment_EBRAINS_dataset/"
-meta = sbm.utilities.path_utils.metadata
+REG_FOLDER = "/mnt/e/Allen_Realignment_EBRAINS_dataset/registration_data"
+meta = ggd.utilities.path_utils.metadata
 meta = meta[meta["sleep_state"] == "Nothing"]
+
 genes = meta["gene"].unique()
+genes = [i for i in genes if i != "Nothing"]
 len(genes)
 
 
-def _process_gene(gene):
-    gene_vol = sbm.gene_to_volume(
-        gene, reg_folder=reg_folder, image_folder=image_folder, do_interpolation=True
+def _process_gene(gene_name):
+    gene_vol = ggd.gene_to_volume(
+        gene_name,
+        reg_folder=REG_FOLDER,
+        image_folder=IMAGE_FOLDER,
+        do_interpolation=True,
     )
-    sbm.write_nifti(gene_vol, 25, f"outputs/gene_volumes/{gene}")
-    return gene
+    ggd.write_nifti(
+        gene_vol,
+        25,
+        f"/mnt/e/Allen_Realignment_EBRAINS_dataset/gene_volumes_new/{gene_name}",
+    )
+    return gene_name
 
 
 """
-This is a very memory intensive process. Our machine had 256 GB of RAM. 
-You may either want to use the non multithreaded loop which is commented 
-out below. Or lower the threads to something manageable (a rule of thumb 
+This is a very memory intensive process. Our machine had 256 GB of RAM.
+You may either want to use the non multithreaded loop which is commented
+out below. Or lower the threads to something manageable (a rule of thumb
 is 12.8 GB per thread).
 """
-for gene in genes:
-    _process_gene(gene)
+# for gene in tqdm(genes):
+#     _process_gene(gene)
 
 with ThreadPoolExecutor(max_workers=20) as executor:
     futures = {executor.submit(_process_gene, gene): gene for gene in genes}
