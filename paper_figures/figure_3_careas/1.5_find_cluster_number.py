@@ -16,20 +16,24 @@ from tqdm import tqdm
 
 # parameters
 cluster_list = np.arange(10, 100, 5)
-sample_size = 30_000
+sample_size = 1_000_000
 random_seed = 42
-max_iter = 100
-files = glob("/mnt/d/Allen_Realignment_EBRAINS_dataset/CArea_atlas/pca/*.nrrd")
-
+max_iter = 1000
+files = glob("/mnt/e/Allen_Realignment_EBRAINS_dataset/CArea_atlas/pca_new/*.nrrd")
 if len(files) == 0:
     raise FileNotFoundError("No PCA volumes found")
 
 
 # load atlas and hemisphere mask (same as original but reused for subsampling)
+
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
-hemi_atlas = np.transpose(atlas.annotation, (2, 0, 1))[::-1, ::-1, ::-1]
-hemi_atlas = hemi_atlas[hemi_atlas.shape[0] // 2 :]
+
+hemi_atlas = atlas.annotation
+hemi_atlas = (hemi_atlas[:,:,: hemi_atlas.shape[2] // 2][:,:,::-1] / 2) + (
+    hemi_atlas[:,:,hemi_atlas.shape[2] // 2 :] / 2
+)
 hemimask = hemi_atlas != 0
+
 n_voxels = hemimask.sum()
 
 if sample_size > n_voxels:
@@ -121,7 +125,7 @@ for n_clusters in tqdm(cluster_list):
         curr_n_init = 10
         cur_max_iter = max_iter
     else:
-        curr_n_init = 5
+        curr_n_init = 50
         cur_max_iter = max_iter
 
     print(f"\nRunning KMeans with k={n_clusters}, n_init={curr_n_init}")
@@ -183,54 +187,36 @@ if ks.size:
     explained_vars = explained_vars[sort_idx]
     silhouette_scores = silhouette_scores[sort_idx]
 
-fig, axes = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
+fig, ax = plt.subplots(figsize=(8, 5))
 
-axes[0].plot(ks, explained_vars, marker="o")
-axes[0].set_ylabel("Explained variance")
-axes[0].grid(True, linestyle="--", alpha=0.3)
+ax.plot(ks, silhouette_scores, marker="o")
+ax.set_ylabel("Silhouette")
+ax.set_xlabel("Number of clusters (k)")
+ax.grid(True, linestyle="--", alpha=0.3)
 
-explained_elbow = estimate_elbow(ks, explained_vars, increasing=True, curve="concave")
-if explained_elbow is not None:
-    ke, ve = explained_elbow
-    axes[0].axvline(ke, color="tab:red", linestyle="--", alpha=0.6)
-    axes[0].annotate(
-        f"elbow≈{ke:.1f}",
-        xy=(ke, ve),
-        xytext=(0, 12),
+# Manual annotation at k=55
+manual_k = 55
+if manual_k in ks:
+    idx = np.where(ks == manual_k)[0][0]
+    manual_score = silhouette_scores[idx]
+
+    ax.axvline(manual_k, color="tab:red", linestyle="--", alpha=0.6)
+    ax.annotate(
+        f"selected k={manual_k}",
+        xy=(manual_k, manual_score),
+        xytext=(12, 24),
         textcoords="offset points",
         arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.5),
         color="tab:red",
         fontsize=9,
     )
-    print(f"Estimated explained variance elbow at k={ke:.2f}")
+    print(f"Manually selected k={manual_k}")
 
-axes[1].plot(ks, silhouette_scores, marker="o")
-axes[1].set_ylabel("Silhouette")
-axes[1].grid(True, linestyle="--", alpha=0.3)
-
-silhouette_elbow = estimate_elbow(
-    ks, silhouette_scores, increasing=False, curve="convex"
-)
-if silhouette_elbow is not None:
-    ke, ve = silhouette_elbow
-    axes[1].axvline(ke, color="tab:red", linestyle="--", alpha=0.6)
-    axes[1].annotate(
-        f"elbow≈{ke:.1f}",
-        xy=(ke, ve),
-        xytext=(0, 12),
-        textcoords="offset points",
-        arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.5),
-        color="tab:red",
-        fontsize=9,
-    )
-    print(f"Estimated silhouette elbow at k={ke:.2f}")
-
-
-plt.suptitle("KMeans metrics vs cluster number")
+plt.title("KMeans Silhouette Score vs cluster number")
 plt.tight_layout()
 
 # Save to SVG
-out_dir = Path("paper_figures/figure_3_careas/plots")
+out_dir = Path("plots")
 out_dir.mkdir(parents=True, exist_ok=True)
 out_path = out_dir / "kmeans_metrics.svg"
 plt.savefig(out_path, format="svg", bbox_inches="tight")

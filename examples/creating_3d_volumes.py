@@ -27,7 +27,6 @@ genes = meta["gene"].unique()
 genes = [i for i in genes if i != "Nothing"]
 len(genes)
 
-
 def _process_gene(gene_name):
     gene_vol = ggd.gene_to_volume(
         gene_name,
@@ -41,16 +40,6 @@ def _process_gene(gene_name):
         f"/mnt/e/Allen_Realignment_EBRAINS_dataset/gene_volumes_new/{gene_name}",
     )
     return gene_name
-
-
-"""
-This is a very memory intensive process. Our machine had 256 GB of RAM.
-You may either want to use the non multithreaded loop which is commented
-out below. Or lower the threads to something manageable (a rule of thumb
-is 12.8 GB per thread).
-"""
-# for gene in tqdm(genes):
-#     _process_gene(gene)
 
 with ThreadPoolExecutor(max_workers=20) as executor:
     futures = {executor.submit(_process_gene, gene): gene for gene in genes}

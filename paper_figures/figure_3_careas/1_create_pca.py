@@ -13,34 +13,32 @@ from sklearn.utils import gen_batches
 
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
 
-hemi_atlas = np.transpose(atlas.annotation, (2, 0, 1))[::-1, ::-1, ::-1]
-hemi_atlas = (hemi_atlas[: hemi_atlas.shape[0] // 2][::-1] / 2) + (
-    hemi_atlas[hemi_atlas.shape[0] // 2 :] / 2
+hemi_atlas = atlas.annotation
+hemi_atlas = (hemi_atlas[:,:,: hemi_atlas.shape[2] // 2][:,:,::-1] / 2) + (
+    hemi_atlas[:,:,hemi_atlas.shape[2] // 2 :] / 2
 )
 hemimask = hemi_atlas != 0
 
-hemi_template = np.transpose(atlas.reference, (2, 0, 1))[::-1, ::-1, ::-1]
-hemi_template = (hemi_template[: hemi_template.shape[0] // 2][::-1] / 2) + (
-    hemi_template[hemi_template.shape[0] // 2 :] / 2
+hemi_template = atlas.reference
+hemi_template = (hemi_template[:,:,: hemi_template.shape[2] // 2][:,:,::-1] / 2) + (
+    hemi_template[:,:,hemi_template.shape[2] // 2 :] / 2
 )
 hemi_template = hemi_template / hemi_template.max()
 hemi_template = hemi_template * 255
 hemi_template = hemi_template.astype(np.uint8)
 
-files = glob("outputs/gene_volumes/*.nii.gz")
+files = glob("/mnt/e/Allen_Realignment_EBRAINS_dataset/gene_volumes_new/*.nii.gz")
 files = [i for i in files if os.path.exists(i)]
-
 
 def process_file(file):
     img = nib.load(file)
     arr = img.get_fdata()
-    half = arr.shape[0] // 2
+    half = arr.shape[2] // 2
     # mirror and average halves
-    mirror = arr[:half][::-1] / 2.0
-    mirror += arr[half:] / 2.0
+    mirror = arr[:,:,:half][:,:,::-1] / 2.0
+    mirror += arr[:,:,half:] / 2.0
     mirror = mirror.astype(np.uint8)
-    return mirror[hemimask != 0]
-
+    return mirror[hemimask!=0]
 
 # Multithreaded processing while preserving order
 voxels = [None] * (len(files) + 1)
@@ -113,4 +111,4 @@ for i, batch in enumerate(
 for i in tqdm(range(n_components_)):
     temp_vol = np.zeros(hemimask.shape)
     temp_vol[hemimask != 0] = voxels_pca[:, i]
-    nrrd.write(f"/mnt/g/outputs/pca/pca{i}.nrrd", temp_vol)
+    nrrd.write(f"/mnt/e/Allen_Realignment_EBRAINS_dataset/CArea_atlas/pca_new/pca{i}.nrrd", temp_vol)

@@ -55,9 +55,9 @@ with open("datafiles/allen_unique_rgb.json", "r") as f:
 
 
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
-# Get and adjust hemisphere atlas.
-hemi_atlas = np.transpose(atlas.annotation, (2, 0, 1))[::-1, ::-1, ::-1]
-hemi_atlas = hemi_atlas[hemi_atlas.shape[0] // 2 :]
+hemi_atlas = atlas.annotation
+hemi_atlas = (hemi_atlas[:,:,: hemi_atlas.shape[2] // 2][:,:,::-1])
+hemimask = hemi_atlas != 0
 
 volpath = "datafiles/carea_atlas_55_regions.nrrd"
 vol, header = nrrd.read(volpath)
@@ -124,12 +124,12 @@ recol_folder = "plots/recolored_carea"
 os.makedirs(recol_folder, exist_ok=True)
 
 # Save each slice (along the first axis) of the colored volume as a PNG in the new folder.
-num_slices = colored_vol.shape[1]
+num_slices = colored_vol.shape[0]
 for i in tqdm(range(num_slices)):
-    slice_rec = colored_vol[:, i]
+    slice_rec = colored_vol[i]
     slice_rec[(slice_rec == 0).all(axis=-1)] = 255
 
-    annot_slice = vol[:, i]
+    #annot_slice = vol[:, i]
     # outline_slice = find_boundaries(annot_slice, connectivity=2, mode='subpixel')
     # outline_mask = outline_slice > 0
     fig, ax = plt.subplots(figsize=(8, 8), dpi=300)

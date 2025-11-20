@@ -12,6 +12,23 @@ from glob import glob
 import requests
 from io import BytesIO
 import os
+import subprocess
+
+
+def _refresh_permissions(path):
+    """Run `ls -lhatr` to coerce network drive permissions before file access."""
+    if not path:
+        return
+    try:
+        subprocess.run(
+            ["ls", "-lhatr", path],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:
+        # Intentionally silence errors; downstream loads will surface real issues.
+        pass
 
 
 def read_image(experiment_id, filename, target_resolution, mode, image_folder=None):
@@ -47,6 +64,7 @@ def read_image(experiment_id, filename, target_resolution, mode, image_folder=No
             pix_sz, c = 10, 255
         else:
             raise Exception("mode must be either expression or histology")
+        _refresh_permissions(img_path)
         img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
 
     if img is None:
@@ -103,6 +121,7 @@ def calculate_affine(srcPoints, dstPoints):
 def read_ants_affine(aff_path):
     if not os.path.exists(aff_path):
         return None
+    _refresh_permissions(aff_path)
     ants_affine = ants.read_transform(aff_path)
     before_points = np.array([[0, 0], [0, 1], [1, 0]])
     after_points = np.array([ants_affine.apply_to_point(p) for p in before_points])
@@ -124,6 +143,7 @@ def apply_affine_to_points(affine_matrix, points):
 def read_nonlinear(non_linear_path):
     if not os.path.exists(non_linear_path):
         return None, None, None
+    _refresh_permissions(non_linear_path)
     try:
         non_linear = nib.load(non_linear_path)
         non_linear_data = non_linear.get_fdata()
