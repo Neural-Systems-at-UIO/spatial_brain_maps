@@ -110,7 +110,7 @@ with open(output_label_file, "w") as f_label:
     for cluster_id, rgb in sorted(colour_lookup.items()):
         # We use a default transparency=1, visibility=1, mesh visibility=0
         f_label.write(
-            f'{cluster_id:<5} {rgb[0]:<5} {rgb[1]:<5} {rgb[2]:<5}    1  1  0    "Carea_{cluster_id}"\n'
+            f'{cluster_id:<5} {rgb[0]:<5} {rgb[1]:<5} {rgb[2]:<5}    1  1  1    "Carea_{cluster_id}"\n'
         )
 
 # Create a coloured volume based on the lookup.

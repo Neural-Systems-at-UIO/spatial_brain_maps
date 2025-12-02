@@ -70,7 +70,19 @@ for n_clusters in cluster_list:
     output = np.zeros_like(hemi_atlas)
     output[hemimask] = labels + 1
     output = output.astype(np.uint8)
+    full_output = np.zeros((566, 320, 456))
+    full_output[:,:,:228] = output[:,:,::-1]
+    full_output[:,:,228:] = output
+
+
+
+
     nrrd.write(
         f"/mnt/e/outputs/clusters/new_init_{curr_n_init}_full_test_auto_{n_clusters}_regions.nrrd",
         output,
+    )
+
+    nrrd.write(
+        f"/mnt/e/outputs/clusters/both_hemi_new_init_{curr_n_init}_full_test_auto_{n_clusters}_regions.nrrd",
+        full_output,
     )
