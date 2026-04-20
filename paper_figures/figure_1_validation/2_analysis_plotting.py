@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
-from statsmodels.stats.multitest import multipletests  # This is the correct import
+from statsmodels.stats.multitest import multipletests
 import matplotlib.ticker as mticker
 import matplotlib.patches as mpatches
 
@@ -392,25 +392,17 @@ def plot_error_distributions(df):
 
     tukey_results = pairwise_tukeyhsd(anova_data["error"], anova_data["group"])
 
-    # Extract results from Tukey's test
-    tukey_data = pd.DataFrame(
-        data=tukey_results._results_table.data[1:],
-        columns=tukey_results._results_table.data[0],
-    )
+    # Build lookup from raw numeric arrays (avoids truncation in _results_table)
+    from itertools import combinations as _combinations
+    tukey_lookup = {}
+    for k, (i, j) in enumerate(_combinations(range(len(tukey_results.groupsunique)), 2)):
+        g1, g2 = tukey_results.groupsunique[i], tukey_results.groupsunique[j]
+        tukey_lookup[(g1, g2)] = (tukey_results.pvalues[k], bool(tukey_results.reject[k]))
     prev_groups = []
     for i, (name, group1, group2, pos1, pos2) in enumerate(comparisons):
-        # Find the Tukey result for this pair
-        tukey_row = tukey_data[
-            (tukey_data["group1"] == group1) & (tukey_data["group2"] == group2)
-        ]
-        if len(tukey_row) == 0:
-            tukey_row = tukey_data[
-                (tukey_data["group1"] == group2) & (tukey_data["group2"] == group1)
-            ]
-
-        if len(tukey_row) > 0:
-            p_val = float(tukey_row["p-adj"].values[0])
-            reject = tukey_row["reject"].values[0]
+        pair = (group1, group2) if (group1, group2) in tukey_lookup else (group2, group1)
+        if pair in tukey_lookup:
+            p_val, reject = tukey_lookup[pair]
 
             # Determine significance level using Tukey's adjusted p-values
             if p_val < 0.001:
@@ -532,10 +524,10 @@ def plot_error_distributions(df):
 
             # Add significance text and p-value above the connecting line
             overall_mid = (x1_mid + x2_mid) / 2
-            if p_val < 0.001:
-                p_text = "p<0.001"
-            else:
-                p_text = f"p={p_val:.3f}"
+            # if p_val < 0.001:
+            #     p_text = "p<0.001"
+            # else:
+            p_text = f"p={p_val}"
             sig_with_p = f"{sig_text} ({p_text})"
             ax.text(
                 overall_mid,
@@ -601,7 +593,11 @@ def perform_statistical_tests(df):
         for g in ["Expert", "Novice", "Our Pipeline", "ABA"]
     ]
     f_stat, p_val = stats.f_oneway(*groups)
-    print(f"One-way ANOVA: F={f_stat:.3f}, p={p_val:.4f}")
+    n_total = sum(len(g) for g in groups)
+    df_between = len(groups) - 1
+    df_within = n_total - len(groups)
+    p_str = f"{p_val:.2e}" if p_val < 0.001 else f"{p_val:.4f}"
+    print(f"One-way ANOVA: F({df_between}, {df_within}) = {f_stat:.3f}, p = {p_str}")
     # If ANOVA is significant, perform post-hoc Tukey's HSD test
     if p_val < 0.05:
         from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -645,8 +641,16 @@ def plot_statistical_comparisons(df):
         "ABA": aba_errors,
     }
 
-    # Calculate group means for the plot
+    # Calculate group means and SDs for the plot
     group_means = {g: group_data[g].mean() for g in groups}
+    group_sds = {g: group_data[g].std() for g in groups}
+
+    # One-way ANOVA with degrees of freedom
+    f_stat, anova_p = stats.f_oneway(*[group_data[g] for g in groups])
+    n_total = sum(len(group_data[g]) for g in groups)
+    df_between = len(groups) - 1
+    df_within = n_total - len(groups)
+    print(f"One-way ANOVA: F({df_between}, {df_within}) = {f_stat:.3f}, p = {anova_p:.4e}")
 
     # Create figure
     fig, axes = plt.subplots(len(groups), len(groups), figsize=(12, 12))
@@ -656,13 +660,14 @@ def plot_statistical_comparisons(df):
         for j in range(len(groups)):
             axes[i, j].axis("off")
 
-    # Add group names and mean values on diagonal
+    # Add group names and mean ± SD on diagonal
     for i, group in enumerate(groups):
         mean_val = group_means[group]
+        sd_val = group_sds[group]
         axes[i, i].text(
             0.5,
             0.5,
-            f"{group}\nMean: {mean_val:.1f}",
+            f"{group}\nMean: {mean_val:.1f}\nSD: {sd_val:.1f}",
             ha="center",
             va="center",
             fontsize=12,
@@ -679,11 +684,12 @@ def plot_statistical_comparisons(df):
 
         tukey_results = pairwise_tukeyhsd(anova_data["error"], anova_data["group"])
 
-        # Extract results from Tukey's test
-        tukey_data = pd.DataFrame(
-            data=tukey_results._results_table.data[1:],
-            columns=tukey_results._results_table.data[0],
-        )
+        # Build lookup from raw numeric arrays (avoids truncation in _results_table)
+        from itertools import combinations as _combinations
+        tukey_lookup = {}
+        for k, (i, j) in enumerate(_combinations(range(len(tukey_results.groupsunique)), 2)):
+            g1, g2 = tukey_results.groupsunique[i], tukey_results.groupsunique[j]
+            tukey_lookup[(g1, g2)] = (tukey_results.pvalues[k], bool(tukey_results.reject[k]))
 
         # Fill in only the upper triangle of the grid (above diagonal) with Tukey's HSD results
         for i in range(len(groups)):
@@ -691,36 +697,29 @@ def plot_statistical_comparisons(df):
                 group1 = groups[i]
                 group2 = groups[j]
 
-                # Find the Tukey result for this pair
-                tukey_row = tukey_data[
-                    (tukey_data["group1"] == group1) & (tukey_data["group2"] == group2)
-                ]
-                if len(tukey_row) == 0:
-                    tukey_row = tukey_data[
-                        (tukey_data["group1"] == group2)
-                        & (tukey_data["group2"] == group1)
-                    ]
-
-                if len(tukey_row) > 0:
-                    p_val = float(tukey_row["p-adj"].values[0])
-                    reject = tukey_row["reject"].values[0]
+                pair = (group1, group2) if (group1, group2) in tukey_lookup else (group2, group1)
+                if pair in tukey_lookup:
+                    p_val, reject = tukey_lookup[pair]
 
                     # Format p-value with stars for significance
                     if p_val < 0.001:
-                        sig_str = "p < 0.001 ***"
+                        sig_str = f"p = {p_val:.2e} ***"
                     elif p_val < 0.01:
-                        sig_str = f"p = {p_val:.3f} **"
+                        sig_str = f"p = {p_val:.4f} **"
                     elif p_val < 0.05:
-                        sig_str = f"p = {p_val:.3f} *"
+                        sig_str = f"p = {p_val:.4f} *"
                     else:
-                        sig_str = f"p = {p_val:.3f} (ns)"
+                        sig_str = f"p = {p_val:.4f} (ns)"
 
                     # Calculate mean difference
                     diff = group_means[group1] - group_means[group2]
 
                     # Create the comparison text
                     comparison_text = (
-                        f"{group1} vs {group2}\nMean diff: {diff:.1f}\n{sig_str}"
+                        f"{group1} vs {group2}\n"
+                        f"Mean diff: {diff:.1f}\n"
+                        f"SD: {group_sds[group1]:.1f} vs {group_sds[group2]:.1f}\n"
+                        f"{sig_str}"
                     )
 
                     # Add to plot - only in upper triangle
@@ -739,9 +738,14 @@ def plot_statistical_comparisons(df):
                             "#eeffee"
                         )  # Light green for non-significant
 
+        if anova_p < 0.001:
+            anova_p_str = f"p = {anova_p:.2e}"
+        else:
+            anova_p_str = f"p = {anova_p:.4f}"
         plt.suptitle(
-            "Statistical Comparisons of Registration Error Between Groups\n(ANOVA with Tukey's HSD)",
-            fontsize=16,
+            f"Statistical Comparisons of Registration Error Between Groups\n"
+            f"One-way ANOVA: F({df_between}, {df_within}) = {f_stat:.3f}, {anova_p_str}  |  Post-hoc: Tukey's HSD",
+            fontsize=14,
         )
 
     except ImportError:
@@ -761,13 +765,13 @@ def plot_statistical_comparisons(df):
 
                 # Format p-value with stars for significance
                 if p_val < 0.001:
-                    sig_str = "p < 0.001 ***"
+                    sig_str = f"p = {p_val:.2e} ***"
                 elif p_val < 0.01:
-                    sig_str = f"p = {p_val:.3f} **"
+                    sig_str = f"p = {p_val:.4f} **"
                 elif p_val < 0.05:
-                    sig_str = f"p = {p_val:.3f} *"
+                    sig_str = f"p = {p_val:.4f} *"
                 else:
-                    sig_str = f"p = {p_val:.3f} (ns)"
+                    sig_str = f"p = {p_val:.4f} (ns)"
 
                 # Calculate mean difference
                 diff = group_means[group1] - group_means[group2]
