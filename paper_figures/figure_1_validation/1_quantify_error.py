@@ -544,7 +544,9 @@ human_names = list(human_files.keys())
 
 ds_files = glob("datafiles/raters/pipeline_registrations/ds_human_affine/*.json")
 aba_files = glob("datafiles/raters/ABA/*.json")
-
+# 04-0351 was labeled by the allen as having failed QC and they did not provide alignments for it
+# 321-0135, 321-0140 and Pdyn-T2A-CreERT2-258309 were not C56BL/6 and so were not a fair comparison
+# as this study was looking at C56BL/6
 brain_ids = ["04-0180", "05-3097", "06-0262", "1966", "1984", "335-1118"]
 ds_y_shift = 24
 method_names = ["Our Pipeline", "ABA"]
