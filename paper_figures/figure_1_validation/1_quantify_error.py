@@ -1,9 +1,9 @@
 import os
+import json
 import numpy as np
 import itertools
 from glob import glob
 import nibabel as nib
-import PyNutil
 import ants
 import math
 import cv2
@@ -15,8 +15,19 @@ import pandas as pd
 import csv
 from misc.visualign_deformations import transform_vec, triangulate
 
+
+def load_quint_json(path):
+    with open(path, "r") as f:
+        return json.load(f)
+
+# Resolve all relative paths from this script directory.
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+os.chdir(SCRIPT_DIR)
+
 # full path to where your per‐section ANTs affine mats live
-AFFINE_FOLDER = "datafiles/raters/pipeline_registrations/affine/"
+AFFINE_FOLDER = os.path.join(
+    SCRIPT_DIR, "datafiles", "raters", "pipeline_registrations", "affine"
+)
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
 annot = np.transpose(atlas.annotation, (2, 0, 1))[::-1, ::-1, ::-1]
 raw_outline3d = find_boundaries(annot, mode="inner", connectivity=annot.ndim)
@@ -204,7 +215,7 @@ def flatten_grid(nx, ny):
 
 # ─── I/O ───────────────────────────────────────────────────────────────────────
 def get_slice_json(path, section_nr):
-    data = PyNutil.io.read_and_write.load_quint_json(path)
+    data = load_quint_json(path)
     return next(s for s in data["slices"] if s["nr"] == section_nr)
 
 
@@ -254,16 +265,25 @@ def compute_error(
         AFFINE_FOLDER, brain_id, "*", f"*_s{sec4}_SyN_affineTransfo.mat"
     )
     mats = glob(aff_pat)
-    nl_path = (
-        mats[0]
-        .replace("_SyN_affineTransfo.mat", "_SyN_nonLinearDf.nii.gz")
-        .replace("affine", "nonlin")
-    )
-    if os.path.exists(nl_path):
-        nl_im = nib.load(nl_path).get_fdata()
+    nl_im = None
+    if mats:
+        nl_path = (
+            mats[0]
+            .replace("_SyN_affineTransfo.mat", "_SyN_nonLinearDf.nii.gz")
+            .replace("affine", "nonlin")
+        )
+
+        if os.path.exists(nl_path):
+            nl_im = nib.load(nl_path).get_fdata()
+        else:
+            print("no nonlinear found at ", nl_path)
+    if nl_im is not None:
         ny, nx = nl_im.shape[0], nl_im.shape[1]
+    else:
+        # Fallback to section dimensions when no nonlinear field exists.
+        ny, nx = int(h), int(w)
     px, py = flatten_grid(nx, ny)
-    if test_name == "Our Pipeline":
+    if test_name == "Our Pipeline" and nl_im is not None:
         add = nl_im[py, px].squeeze()
         py = py - add[:, 0]
         px = px - add[:, 1]
@@ -367,7 +387,7 @@ def test_vs_all_humans(
     errors = []
     for excluded_name in human_names:
         refs = [aligns[n] for n in human_names if n != excluded_name]
-        ref_m = [markers[n] for n in human_names if n != name]
+        ref_m = [markers[n] for n in human_names if n != excluded_name]
         e = compute_error(
             test_name,
             aligns[test_name],
@@ -576,9 +596,15 @@ for brain in brain_ids:
     files_all = sum(hf_brain.values(), []) + ds_brain + aba_brain
     sec_sets = []
     for path in files_all:
-        data = PyNutil.io.read_and_write.load_quint_json(path)
+        data = load_quint_json(path)
         sec_sets.append({s["nr"] for s in data["slices"]})
+    if not sec_sets:
+        print(f"No registration files found for brain {brain}; skipping")
+        continue
     section_nrs = sorted(set.intersection(*sec_sets))
+    if not section_nrs:
+        print(f"No shared sections found for brain {brain}; skipping")
+        continue
 
     # Initialize accumulators for this brain
     brain_human_acc = {n: [] for n in human_names}
