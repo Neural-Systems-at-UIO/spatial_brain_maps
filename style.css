@@ -284,6 +284,14 @@ header.site-header p {
     --bg: linear-gradient(145deg, #ffe3f3, #f6d0ea);
 }
 
+.external-links .ext-link.dataset {
+    --bg: linear-gradient(145deg, #174f4a, #123532)
+}
+
+[data-theme="light"] .external-links .ext-link.dataset {
+    --bg: linear-gradient(145deg, #d9f5f0, #c5e9e4);
+}
+
 @media (max-width:700px) {
     .top-right-links {
         position: static;
