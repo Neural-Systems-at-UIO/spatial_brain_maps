@@ -1,6 +1,13 @@
 import os
 import pandas as pd
-from PyNutil.io.read_and_write import load_quint_json
+try:
+    from PyNutil.io.read_and_write import load_quint_json
+except ImportError:  # PyNutil >= 0.4
+    import json
+
+    def load_quint_json(path, propagate_missing_values=False):
+        with open(path) as stream:
+            return json.load(stream)
 from pathlib import Path
 
 # load global metadata once

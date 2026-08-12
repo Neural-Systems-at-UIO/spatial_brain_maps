@@ -501,7 +501,7 @@ def leave_one_out_humans(
     aligns, human_names, annot, h, w, section_nr, brain_id, markers
 ):
     """
-    Returns {human_name: error vs mean(of the other 2)}.
+    Returns {human_name: error vs mean(of the other human raters)}.
     """
     errs = {}
     for name in human_names:
@@ -541,7 +541,7 @@ def test_vs_all_humans(
     errors = []
     for excluded_name in human_names:
         refs = [aligns[n] for n in human_names if n != excluded_name]
-        ref_m = [markers[n] for n in human_names if n != name]
+        ref_m = [markers[n] for n in human_names if n != excluded_name]
         e = compute_error(
             test_name,
             aligns[test_name],
@@ -851,7 +851,7 @@ for brain in brain_ids:
 
 
 # Save consolidated results
-save_consolidated_results(results, "consolidated_registration_results.csv")
+save_consolidated_results(results, "datafiles/consolidated_registration_results.csv")
 
 # Print final summary across all brains
 print("\n=== Final summary across all brains ===")

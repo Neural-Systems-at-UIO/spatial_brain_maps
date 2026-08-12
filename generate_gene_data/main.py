@@ -9,9 +9,12 @@ from .points import id_to_points, gene_to_points, write_values_to_meshview
 from .volume import id_to_volume, gene_to_volume, interpolate, write_nifti
 
 # config constants
-image_folder_path = "/mnt/g/AllenDataalignmentProj/resolutionPixelSizeMetadata/ISH/"
+image_folder_path = (
+    "/media/harrycarey/Elements/AllenDataalignmentProj/"
+    "resolutionPixelSizeMetadata/ISH"
+)
 path_to_registration_files = (
-    "/mnt/g/Allen_Realignment_EBRAINS_dataset/registration_data"
+    "/media/harrycarey/Elements/Allen_Realignment_EBRAINS_dataset/registration_data"
 )
 
 
