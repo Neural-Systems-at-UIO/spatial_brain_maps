@@ -367,6 +367,36 @@ def flatten_grid(nx, ny):
     return grid_x.flatten(), grid_y.flatten()
 
 
+def mean_reference_xyz(ref_aligns, ref_markers, nx, ny, h, w):
+    """Map each reference registration to 3D, then average the 3D positions."""
+    if ref_markers is None:
+        ref_markers = [None] * len(ref_aligns)
+    if len(ref_aligns) != len(ref_markers):
+        raise ValueError("ref_aligns and ref_markers must have the same length")
+    if not ref_aligns:
+        raise ValueError("At least one reference alignment is required")
+
+    grid_x, grid_y = flatten_grid(nx, ny)
+    reference_xyz = []
+    for alignment, marker_set in zip(ref_aligns, ref_markers):
+        px = grid_x.copy()
+        py = grid_y.copy()
+        if marker_set is not None:
+            triangulation = triangulate(w, h, marker_set)
+            px = (px / nx) * w
+            py = (py / ny) * h
+            px, py = transform_vec(triangulation, px, py)
+            px = (px / w) * nx
+            py = (py / h) * ny
+
+        reference_xyz.append(
+            np.column_stack(pix_to_xyz(px, py, ny, nx, alignment))
+        )
+
+    mean_xyz = np.mean(reference_xyz, axis=0)
+    return mean_xyz[:, 0], mean_xyz[:, 1], mean_xyz[:, 2]
+
+
 # ─── I/O ───────────────────────────────────────────────────────────────────────
 def get_slice_json(path, section_nr):
     data = load_quint_json(path)
@@ -448,29 +478,9 @@ def compute_error(
         px, py = transform_vec(triangulation, px, py)
         px = (px / w) * nx
         py = (py / h) * ny
-    mean_ref = np.mean(ref_aligns, axis=0)
-    tempx, tempy = flatten_grid(nx, ny)
-    if ref_markers is not None:
-        aggregate_x = []
-        aggregate_y = []
-        for ref_m in ref_markers:
-            tempx_copy = tempx.copy()
-            tempy_copy = tempy.copy()
-            if ref_m is not None:
-                triangulation = triangulate(w, h, ref_m)
-                tempx_copy = (tempx_copy / nx) * w
-                tempy_copy = (tempy_copy / ny) * h
-                tempx_copy, tempy_copy = transform_vec(
-                    triangulation, tempx_copy, tempy_copy
-                )
-                tempx_copy = (tempx_copy / w) * nx
-                tempy_copy = (tempy_copy / h) * ny
-                aggregate_x.append(tempx_copy)
-                aggregate_y.append(tempy_copy)
-        tempx = np.array(aggregate_x).mean(axis=0)
-        tempy = np.array(aggregate_y).mean(axis=0)
-
-    gtx, gty, gtz = pix_to_xyz(tempx, tempy, ny, nx, mean_ref)
+    gtx, gty, gtz = mean_reference_xyz(
+        ref_aligns, ref_markers, nx, ny, h, w
+    )
     # now lift back into 3D
     x3, y3, z3 = pix_to_xyz(px, py, ny, nx, test_align)
 
@@ -641,36 +651,15 @@ def create_group_atlas_overlay(
         )
         return
 
-    # Build a grid based on the NL dimensions
-    tempx, tempy = flatten_grid(nx, ny)
-
-    # If marker data are available, combine each rater's transformation similar to compute_error.
-    aggregate_x = []
-    aggregate_y = []
-    for name in human_names:
-        ref_m = markers.get(name)
-        if ref_m is not None:
-            # Using the same approach as in compute_error for each marker set:
-            triangulation = triangulate(W, H, ref_m)
-            # Scale grid to image coordinates, transform, then re-scale to NL dimensions
-            tempx_copy = (tempx / nx) * W
-            tempy_copy = (tempy / ny) * H
-            tempx_copy, tempy_copy = transform_vec(
-                triangulation, tempx_copy, tempy_copy
-            )
-            tempx_copy = (tempx_copy / W) * nx
-            tempy_copy = (tempy_copy / H) * ny
-            aggregate_x.append(tempx_copy)
-            aggregate_y.append(tempy_copy)
-    if aggregate_x:
-        tempx = np.array(aggregate_x).mean(axis=0)
-        tempy = np.array(aggregate_y).mean(axis=0)
-
-    # Get the group average alignment (the "mean reference")
-    group_align = np.mean([aligns[name] for name in human_names], axis=0)
-
-    # Convert the adjusted 2D grid to 3D atlas coordinates using the group alignment
-    gtx, gty, gtz = pix_to_xyz(tempx, tempy, ny, nx, group_align)
+    # Map every rater's deformed grid into 3D before calculating the consensus.
+    gtx, gty, gtz = mean_reference_xyz(
+        [aligns[name] for name in human_names],
+        [markers.get(name) for name in human_names],
+        nx,
+        ny,
+        H,
+        W,
+    )
 
     # Clip coordinates to template range
     gtx[gtx < 0] = 0
