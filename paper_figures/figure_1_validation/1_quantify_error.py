@@ -1,14 +1,11 @@
 import os
 import json
 import numpy as np
-import itertools
 from glob import glob
 import nibabel as nib
-import ants
 import math
 import cv2
 from brainglobe_atlasapi import BrainGlobeAtlas
-from scipy.ndimage import zoom
 from skimage.segmentation import find_boundaries
 from skimage.morphology import thin
 import pandas as pd
@@ -189,105 +186,6 @@ template = np.transpose(atlas.reference, (2, 0, 1))[::-1, ::-1, ::-1]
 template = template / template.max()
 
 
-def generate_target_slice(orientation, atlas):
-    """
-    Generate a 2D slice from a 3D atlas based on orientation vectors.
-
-    Args:
-        orientation (list): Orientation vector [ox, oy, oz, ux, uy, uz, vx, vy, vz].
-        atlas (ndarray): 3D atlas volume.
-
-    Returns:
-        ndarray: 2D slice extracted from the atlas.
-    """
-    ox, oy, oz, ux, uy, uz, vx, vy, vz = orientation
-    slice_width = np.floor(math.hypot(ux, uy, uz)).astype(int) + 1
-    slice_height = np.floor(math.hypot(vx, vy, vz)).astype(int) + 1
-    data = np.zeros((slice_width, slice_height), dtype=np.uint32).flatten()
-    xdim, ydim, zdim = atlas.shape
-
-    y_values = np.arange(slice_height)
-    x_values = np.arange(slice_width)
-
-    hx = ox + vx * (y_values / slice_height)
-    hy = oy + vy * (y_values / slice_height)
-    hz = oz + vz * (y_values / slice_height)
-
-    wx = ux * (x_values / slice_width)
-    wy = uy * (x_values / slice_width)
-    wz = uz * (x_values / slice_width)
-
-    lx = np.floor(hx[:, None] + wx).astype(int)
-    ly = np.floor(hy[:, None] + wy).astype(int)
-    lz = np.floor(hz[:, None] + wz).astype(int)
-
-    valid_indices = (
-        (0 <= lx) & (lx < xdim) & (0 <= ly) & (ly < ydim) & (0 <= lz) & (lz < zdim)
-    ).flatten()
-
-    lxf = lx.flatten()
-    lyf = ly.flatten()
-    lzf = lz.flatten()
-
-    valid_lx = lxf[valid_indices]
-    valid_ly = lyf[valid_indices]
-    valid_lz = lzf[valid_indices]
-
-    atlas_slice = atlas[valid_lx, valid_ly, valid_lz]
-    data[valid_indices] = atlas_slice
-
-    data_im = data.reshape((slice_height, slice_width))
-    return data_im
-
-
-def calculate_affine(source_points, destination_points):
-    # Add a fourth coordinate of 1 to each point
-    source_points = np.hstack((source_points, np.ones((source_points.shape[0], 1))))
-    destination_points = np.hstack(
-        (destination_points, np.ones((destination_points.shape[0], 1)))
-    )
-    affine_matrix, _, _, _ = np.linalg.lstsq(
-        source_points, destination_points, rcond=None
-    )
-    return affine_matrix.T
-
-
-def read_ants_affine(affine_path):
-    if not os.path.exists(affine_path):
-        return None
-    ants_transform = ants.read_transform(affine_path)
-    base_points = np.array([[0, 0], [0, 1], [1, 0]])
-    transformed_points = np.array(
-        [ants_transform.apply_to_point(p) for p in base_points]
-    )
-    affine_matrix = calculate_affine(base_points, transformed_points)
-    return affine_matrix
-
-
-def apply_affine_to_points(affine_matrix, points):
-    # Pre-shift the points into padded image coordinates
-    points_homogeneous = np.column_stack((points, np.ones(len(points))))
-    warped_points = (affine_matrix @ points_homogeneous.T).T
-    return warped_points[:, :2]
-
-
-# ─── helper: apply non-linear DF to 2D points ───────────────────────────────
-def apply_nonlinear_to_points(deformation_field, output_shape, points):
-    """
-    deformation_field: H x W x 2 numpy array (DX, DY at each voxel)
-    points:            N x 2 array of (x, y) coordinates
-    returns:           N x 2 array of warped points
-    """
-    coords = [points[:, 1], points[:, 0]]  # map_coordinates expects (row, col)
-    target_h, target_w = output_shape
-    scale_y = target_h / deformation_field.shape[0]
-    scale_x = target_w / deformation_field.shape[1]
-    resized_deformation = zoom(deformation_field, (scale_y, scale_x, 1), order=1)
-    dx = resized_deformation[:, :, 0].flatten()
-    dy = resized_deformation[:, :, 1].flatten()
-    return points - np.stack((dx, dy), axis=1)
-
-
 # ─── Core geometry routines ────────────────────────────────────────────────────
 def find_plane_equation(plane_params):
     a, b, c = (
@@ -333,23 +231,6 @@ def get_angle(plane_params, direction):
         if b[0] < a[0]:
             angle *= -1
     return angle
-
-
-def normalised_grid(alignment, num_x, num_z):
-    normal, k = find_plane_equation(alignment)
-    xv, zv = np.meshgrid(np.arange(num_x), np.arange(num_z))
-    y_ = xv * normal[0] + zv * normal[2] + k
-    return xv, -(y_ / normal[1]), zv
-
-
-def xyz_to_pix(coordinates_3d, h, w, alignment):
-    O, U, V = alignment[:3], alignment[3:6], alignment[6:9]
-    pts = np.vstack(coordinates_3d)
-    b = pts - O[:, None]
-    M = np.stack([U, V], axis=1)
-    sol, *_ = np.linalg.lstsq(M, b, rcond=None)
-    t, s = sol
-    return t * w, s * h
 
 
 def pix_to_xyz(px, py, h, w, alignment):

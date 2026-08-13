@@ -14,12 +14,15 @@ from generate_gene_data import id_to_volume
 # Analysis settings
 SEED = 20260812
 SAMPLES_PER_SIZE = 100
-REFERENCE_SIZE = 10
-COMPARISON_SIZES = range(1, 10)
+REFERENCE_SIZE = 15
+COMPARISON_SIZES = range(1, 11)
 RESOLUTION = 25
 # Correlate on a regular 100-um grid. Set to 1 to use every 25-um voxel.
 CORRELATION_STRIDE = 4
-VOLUME_WORKERS = 8
+# Volume reconstruction is memory-bound; each worker owns several full brain
+# arrays. Running these concurrently can exhaust RAM even though the later
+# analysis uses memory-mapped files.
+VOLUME_WORKERS = 1
 
 # Data paths
 ROOT = Path(__file__).resolve().parents[2]
@@ -71,13 +74,13 @@ def average_volumes(experiment_ids, volumes):
 
 
 CACHE_FOLDER.mkdir(parents=True, exist_ok=True)
-rng = np.random.default_rng(SEED)
 metadata = pd.read_csv(METADATA_PATH)
 gene_counts = metadata.groupby("gene")["experiment_id"].nunique()
 genes = gene_counts[gene_counts.isin([25, 26])].index
 results = []
 
-for gene in genes:
+for gene_index, gene in enumerate(genes):
+    rng = np.random.default_rng(SEED + gene_index)
     all_ids = sorted(metadata.loc[metadata["gene"] == gene, "experiment_id"].unique())
     excluded_id = None
     if len(all_ids) == 26:

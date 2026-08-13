@@ -824,3 +824,8 @@ perform_statistical_tests(df)
 # Print summary statistics
 print("\n=== Summary Statistics ===")
 print(df.groupby(["group", "rater"])["error"].agg(["mean", "median", "std"]))
+
+print("\n=== Overall Group Averages ===")
+for group in ["Expert", "Novice"]:
+    average_error = df.loc[df["group"] == group, "error"].mean()
+    print(f"{group} average error: {average_error:.2f} microns")
