@@ -1,5 +1,6 @@
 """Plot interpolation reliability as the number of experiments increases."""
 
+import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -11,10 +12,12 @@ INPUT_CSV = HERE / "interpolation_correlations.csv"
 OUTPUT_STEM = HERE / "interpolation_reliability"
 
 
-def load_results(path: Path) -> pd.DataFrame:
+def load_results(
+    path: Path, correlation_column: str = "pearson_r_brain"
+) -> pd.DataFrame:
     """Load complete result rows, ignoring a final row still being written."""
     results = pd.read_csv(path, on_bad_lines="skip")
-    required = ["gene", "comparison_experiment_count", "pearson_r"]
+    required = ["gene", "comparison_experiment_count", correlation_column]
     missing = set(required).difference(results.columns)
     if missing:
         raise ValueError(f"Missing required columns: {', '.join(sorted(missing))}")
@@ -23,11 +26,18 @@ def load_results(path: Path) -> pd.DataFrame:
     results["comparison_experiment_count"] = pd.to_numeric(
         results["comparison_experiment_count"], errors="coerce"
     )
-    results["pearson_r"] = pd.to_numeric(results["pearson_r"], errors="coerce")
-    return results.dropna(subset=["comparison_experiment_count", "pearson_r"])
+    results[correlation_column] = pd.to_numeric(
+        results[correlation_column], errors="coerce"
+    )
+    results = results.dropna(subset=["comparison_experiment_count", correlation_column])
+    results["pearson_r"] = results.pop(correlation_column)
+    return results
 
 
-def make_plot(results: pd.DataFrame) -> plt.Figure:
+def make_plot(
+    results: pd.DataFrame,
+    ylabel: str = "Pearson correlation within brain voxels",
+) -> plt.Figure:
     # Average the random experiment combinations within each gene and sample count.
     gene_means = (
         results.groupby(["comparison_experiment_count", "gene"], as_index=False)[
@@ -91,7 +101,7 @@ def make_plot(results: pd.DataFrame) -> plt.Figure:
     sample_counts = sorted(gene_means["comparison_experiment_count"].unique())
     ax.set_xticks(sample_counts)
     ax.set_xlabel("Number of experiments in comparison average")
-    ax.set_ylabel("Pearson correlation with 15-experiment average")
+    ax.set_ylabel(ylabel)
     ax.set_ylim(top=1.0)
     x_end = max(sample_counts)
     ax.set_xlim(min(sample_counts) - 0.4, x_end + 1.65)
@@ -135,14 +145,42 @@ def make_plot(results: pd.DataFrame) -> plt.Figure:
     return fig
 
 
-def main() -> None:
-    results = load_results(INPUT_CSV)
+def main(
+    correlation_column: str = "pearson_r_brain",
+    output_stem: Path = OUTPUT_STEM,
+    ylabel: str = "Pearson correlation within brain voxels",
+    summary_label: str = "Brain-masked",
+) -> None:
+    results = load_results(INPUT_CSV, correlation_column)
     if results.empty:
         raise ValueError(f"No complete result rows found in {INPUT_CSV}")
 
-    figure = make_plot(results)
-    figure.savefig(OUTPUT_STEM.with_suffix(".png"), dpi=300, bbox_inches="tight")
-    figure.savefig(OUTPUT_STEM.with_suffix(".pdf"), bbox_inches="tight")
+    gene_lines = results.groupby(
+        ["gene", "comparison_experiment_count"], as_index=False
+    )["pearson_r"].mean()
+    statistics = gene_lines.groupby("comparison_experiment_count")["pearson_r"].agg(
+        ["min", "max", "mean", "std"]
+    )
+    statistics = statistics.rename(columns={"std": "gene_mean_std"})
+    statistics["experiment_std"] = results.groupby("comparison_experiment_count")[
+        "pearson_r"
+    ].std()
+    groups = gene_lines.groupby("comparison_experiment_count")["pearson_r"]
+    min_genes = gene_lines.loc[
+        groups.idxmin(), ["comparison_experiment_count", "gene"]
+    ].set_index("comparison_experiment_count")["gene"]
+    max_genes = gene_lines.loc[
+        groups.idxmax(), ["comparison_experiment_count", "gene"]
+    ].set_index("comparison_experiment_count")["gene"]
+    statistics.insert(1, "min_gene", min_genes)
+    statistics.insert(3, "max_gene", max_genes)
+    statistics.index.name = "number_of_experiments"
+    print(f"{summary_label} Pearson correlation summary across gene means:")
+    print(statistics.to_string(float_format=lambda value: f"{value:.4f}"))
+
+    figure = make_plot(results, ylabel)
+    figure.savefig(output_stem.with_suffix(".png"), dpi=300, bbox_inches="tight")
+    figure.savefig(output_stem.with_suffix(".pdf"), bbox_inches="tight")
     plt.close(figure)
     print(
         f"Plotted {results['gene'].nunique()} genes and "
@@ -151,4 +189,19 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--atlas-regions",
+        action="store_true",
+        help="plot correlations across atlas-region means instead of brain voxels",
+    )
+    arguments = parser.parse_args()
+    if arguments.atlas_regions:
+        main(
+            correlation_column="pearson_r_atlas_regions",
+            output_stem=HERE / "interpolation_reliability_atlas_regions",
+            ylabel="Pearson correlation across atlas-region means",
+            summary_label="Atlas-region",
+        )
+    else:
+        main()

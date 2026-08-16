@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
 
@@ -39,44 +40,63 @@ def load_results(path: Path) -> pd.DataFrame:
         id_vars=["gene", "comparison_experiment_count"],
         value_vars=list(CORRELATION_COLUMNS.values()),
         var_name="correlation_type",
-        value_name="pearson_r",
+        value_name="masked_pearson_r",
     )
     labels = {column: label for label, column in CORRELATION_COLUMNS.items()}
     long["voxel_class"] = long["correlation_type"].map(labels)
-    long["pearson_r"] = pd.to_numeric(long["pearson_r"], errors="coerce")
-    return long.dropna(subset=["comparison_experiment_count", "pearson_r"])
+    long["masked_pearson_r"] = pd.to_numeric(long["masked_pearson_r"], errors="coerce")
+    return long.dropna(subset=["comparison_experiment_count", "masked_pearson_r"])
 
 
 def make_plot(results: pd.DataFrame) -> plt.Figure:
-    """Plot equal-weighted gene means for both voxel classes."""
-    gene_means = results.groupby(
-        ["comparison_experiment_count", "gene", "voxel_class"], as_index=False
-    )["pearson_r"].mean()
-    overall = gene_means.groupby(
-        ["comparison_experiment_count", "voxel_class"], as_index=False
-    )["pearson_r"].mean()
+    """Compare gene-level means for one experiment using two bars."""
+    one_experiment = results.loc[results["comparison_experiment_count"] == 1]
+    if one_experiment.empty:
+        raise ValueError("No results found for comparison_experiment_count = 1")
 
-    fig, ax = plt.subplots(figsize=(7.2, 4.8), constrained_layout=True)
-    for voxel_class, values in overall.groupby("voxel_class", sort=False):
-        values = values.sort_values("comparison_experiment_count")
-        ax.plot(
-            values["comparison_experiment_count"],
-            values["pearson_r"],
-            marker="o",
-            linewidth=2.5,
-            markersize=5,
-            color=COLOURS[voxel_class],
-            label=voxel_class,
+    gene_means = one_experiment.groupby(["gene", "voxel_class"], as_index=False)[
+        "masked_pearson_r"
+    ].mean()
+    order = list(CORRELATION_COLUMNS)
+    summary = (
+        gene_means.groupby("voxel_class")["masked_pearson_r"]
+        .agg(["mean", "std"])
+        .reindex(order)
+    )
+
+    fig, ax = plt.subplots(figsize=(5.6, 4.8), constrained_layout=True)
+    x_positions = np.arange(len(order))
+    ax.bar(
+        x_positions,
+        summary["mean"],
+        yerr=summary["std"],
+        width=0.62,
+        capsize=5,
+        color=[COLOURS[label] for label in order],
+        edgecolor="#333333",
+        linewidth=0.8,
+        error_kw={"elinewidth": 1.4},
+    )
+    for x_position, voxel_class in zip(x_positions, order):
+        values = gene_means.loc[
+            gene_means["voxel_class"] == voxel_class, "masked_pearson_r"
+        ].to_numpy()
+        offsets = np.linspace(-0.11, 0.11, len(values))
+        ax.scatter(
+            x_position + offsets,
+            values,
+            s=20,
+            color="#202020",
+            alpha=0.65,
+            zorder=3,
         )
 
-    sample_counts = sorted(overall["comparison_experiment_count"].unique())
-    ax.set_xticks(sample_counts)
-    ax.set_xlabel("Number of experiments in comparison average")
+    ax.set_xticks(x_positions, order)
     ax.set_ylabel("Pearson correlation with 15-experiment average")
     ax.set_ylim(top=1.0)
     ax.grid(axis="y", color="#d9d9d9", linewidth=0.8)
+    ax.set_axisbelow(True)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.legend(frameon=False)
     return fig
 
 
@@ -90,8 +110,7 @@ def main() -> None:
     figure.savefig(OUTPUT_STEM.with_suffix(".pdf"), bbox_inches="tight")
     plt.close(figure)
     print(
-        f"Plotted {results['gene'].nunique()} genes and "
-        f"{results['comparison_experiment_count'].nunique()} sample counts."
+        f"Plotted the one-experiment comparison for {results['gene'].nunique()} genes."
     )
 
 

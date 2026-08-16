@@ -109,8 +109,8 @@ def masked_correlation(comparison, reference, mask):
     return pearsonr(comparison[mask], reference[mask]).statistic, count
 
 
-def get_interpolation_domain(resolution):
-    """Return the atlas voxels eligible for interpolation."""
+def get_atlas_annotation(resolution):
+    """Return atlas region IDs in the reconstructed-volume orientation."""
     if resolution < 25:
         atlas = brainglobe_atlasapi.BrainGlobeAtlas(
             "ccfv3augmented_mouse_10um"
@@ -123,14 +123,32 @@ def get_interpolation_domain(resolution):
         atlas_resolution = 25
     atlas = np.transpose(atlas, [2, 0, 1])[::-1, ::-1, ::-1]
     scale = atlas_resolution / resolution
-    return zoom(atlas, scale, order=0) != 0
+    return zoom(atlas, scale, order=0)
+
+
+def atlas_region_profile(volume, atlas_labels, region_ids):
+    """Average voxel expression within each nonzero atlas region."""
+    labels = atlas_labels.reshape(-1)
+    values = volume.reshape(-1)
+    sums = np.bincount(labels, weights=values, minlength=int(labels.max()) + 1)
+    counts = np.bincount(labels, minlength=len(sums))
+    return (sums[region_ids] / counts[region_ids]).astype(np.float32)
+
+
+def average_profiles(experiment_ids, profiles):
+    """Average precomputed atlas-region profiles across experiments."""
+    return np.mean(
+        [profiles[experiment_id] for experiment_id in experiment_ids], axis=0
+    )
 
 
 CACHE_FOLDER.mkdir(parents=True, exist_ok=True)
 metadata = pd.read_csv(METADATA_PATH)
-brain_mask = get_interpolation_domain(RESOLUTION)[
+atlas_labels = get_atlas_annotation(RESOLUTION)[
     ::CORRELATION_STRIDE, ::CORRELATION_STRIDE, ::CORRELATION_STRIDE
 ]
+brain_mask = atlas_labels != 0
+atlas_region_ids = np.unique(atlas_labels[brain_mask])
 gene_counts = metadata.groupby("gene")["experiment_id"].nunique()
 genes = gene_counts[gene_counts.isin([25, 26])].index
 results = []
@@ -160,6 +178,14 @@ for gene_index, gene in enumerate(genes):
     real_data_masks = {
         experiment_id: np.load(path, mmap_mode="r")
         for experiment_id, path in mask_paths.items()
+    }
+    region_profiles = {
+        experiment_id: atlas_region_profile(
+            volume[::CORRELATION_STRIDE, ::CORRELATION_STRIDE, ::CORRELATION_STRIDE],
+            atlas_labels,
+            atlas_region_ids,
+        )
+        for experiment_id, volume in volumes.items()
     }
     voxel_count = next(iter(volumes.values()))[
         ::CORRELATION_STRIDE, ::CORRELATION_STRIDE, ::CORRELATION_STRIDE
@@ -198,6 +224,9 @@ for gene_index, gene in enumerate(genes):
                 comparison, reference, interpolated_only_mask
             )
             brain_r, brain_count = masked_correlation(comparison, reference, brain_mask)
+            reference_regions = average_profiles(reference_ids, region_profiles)
+            comparison_regions = average_profiles(comparison_ids, region_profiles)
+            region_r = pearsonr(comparison_regions, reference_regions).statistic
             results.append(
                 {
                     "gene": gene,
@@ -209,6 +238,8 @@ for gene_index, gene in enumerate(genes):
                     "voxel_count": voxel_count,
                     "pearson_r_brain": brain_r,
                     "voxel_count_brain": brain_count,
+                    "pearson_r_atlas_regions": region_r,
+                    "atlas_region_count": len(atlas_region_ids),
                     "pearson_r_real_data": real_r,
                     "voxel_count_real_data": real_count,
                     "pearson_r_interpolated_only": interpolated_r,
