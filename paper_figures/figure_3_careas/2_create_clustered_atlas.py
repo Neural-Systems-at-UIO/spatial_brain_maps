@@ -12,9 +12,9 @@ from brainglobe_atlasapi.bg_atlas import BrainGlobeAtlas
 from tqdm import tqdm
 
 # parameters
-cluster_list = [55]
-files = glob("/mnt/e/Allen_Realignment_EBRAINS_dataset/CArea_atlas/pca_new/*.nrrd")
-
+cluster_list = [10, 20, 55, 70, 1000, 2048, 4096, 32768]
+files = glob("/media/harrycarey/Elements/Allen_Realignment_EBRAINS_dataset/CArea_atlas/pca/*.nrrd")
+print(len(files))
 atlas = BrainGlobeAtlas("ccfv3augmented_mouse_25um")
 hemi_atlas = atlas.annotation
 hemi_atlas = (hemi_atlas[:,:,: hemi_atlas.shape[2] // 2][:,:,::-1] )
