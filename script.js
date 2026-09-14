@@ -175,7 +175,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             const safeStructureName = structure.replace(/[\\/]/g, '_');
-            const response = await fetch(`data/${safeStructureName}_${metric}.json.gz`);
+            // Match the filenames exported by scripts/build_metrics.py.
+            const metricFileName = {
+                expression_pct: 'expr_pct',
+                expression_specificity: 'expr_spec'
+            }[metric] || metric;
+            const response = await fetch(`data/metrics/${encodeURIComponent(safeStructureName)}_${metricFileName}.json.gz`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
             const compressedData = await response.arrayBuffer();

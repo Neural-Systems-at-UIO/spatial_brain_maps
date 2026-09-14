@@ -10,11 +10,29 @@ from tqdm import tqdm
 # ─── CONSTANTS ─────────────────────────────────────────────────────────────────
 SPECIES      = "mus_musculus"
 METADATA_CSV = Path("../spatial_brain_maps/metadata/metadata.csv")
+NIIGZ_DIR    = Path("/run/media/harrycarey/Elements/Allen_Realignment_EBRAINS_dataset/gene_volumes/")
 OUTPUT_DIR   = Path("data")
 
 # ─── GENE INFO ─────────────────────────────────────────────────────────────────
 def load_metadata(path: Path) -> pd.DataFrame:
     return pd.read_csv(path)
+
+def filter_metadata(meta: pd.DataFrame, volume_dir: Path) -> pd.DataFrame:
+    if not volume_dir.is_dir():
+        raise FileNotFoundError(f"Gene volume directory not found: {volume_dir}")
+    meta = meta[
+        (meta["sleep_state"] == "Nothing")
+        & (meta["plane_of_section"] == "coronal")
+        & (meta["treatment"] == "ISH")
+        & (meta["age"] == "P56")
+        & (meta["gene"] != "Nothing")
+    ].copy()
+    genes = {path.name[:-len(".nii.gz")] for path in volume_dir.glob("*.nii.gz")}
+    meta["gene"] = meta["gene"].str.replace("*", "\uf02a", regex=False)
+    meta = meta[meta["gene"].isin(genes)]
+    if meta.empty:
+        raise ValueError("No genes match the metadata filters and available gene volumes.")
+    return meta
 
 def fetch_gene_list(metadata: pd.DataFrame) -> list[str]:
     return metadata["gene"].unique().tolist()
@@ -49,7 +67,7 @@ def build_gene_info(metadata: pd.DataFrame) -> dict:
     return info
 
 def add_counts_and_sort(info: dict, metadata: pd.DataFrame) -> dict:
-    counts = [(metadata["gene"]==g).sum() for g in info["gene_name"]]
+    counts = [int((metadata["gene"]==g).sum()) for g in info["gene_name"]]
     info["number_of_animals"] = counts
     if "Nothing" in info["gene_name"]:
         idx = info["gene_name"].index("Nothing")
@@ -67,6 +85,8 @@ def save_json_gz(obj, path: Path, **kw):
 
 def main():
     meta = load_metadata(METADATA_CSV)
+    meta = filter_metadata(meta, NIIGZ_DIR)
+    print(f"{meta['gene'].nunique()} genes after filtering")
     info = build_gene_info(meta)
     info = add_counts_and_sort(info, meta)
     save_json_gz(info, OUTPUT_DIR/"gene_data_counts.json.gz", indent=4)
