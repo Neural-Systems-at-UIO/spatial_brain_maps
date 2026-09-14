@@ -13,7 +13,7 @@ import concurrent.futures, os
 
 # ─── CONSTANTS ─────────────────────────────────────────────────────────────────
 METADATA_CSV = Path("../spatial_brain_maps/metadata/metadata.csv")
-NIIGZ_DIR      = Path("../outputs/gene_volumes")
+NIIGZ_DIR      = Path("/media/harrycarey/Elements/Allen_Realignment_EBRAINS_dataset/gene_volumes/")
 OUTPUT_DIR     = Path("data")
 
 # ─── BUILD DESCENDANTS VIA BrainGlobeAtlas ────────────────────────────────────────
@@ -53,6 +53,7 @@ def compute_region_stats(meta, desc_map, vol):
     }
     stats["gene_name"] = []
     gene_list = [g for g in meta["gene"].unique() if g != "Nothing"]
+    print(len(gene_list), " genes!")
     eps = 1e-8
 
     def _worker(g):
@@ -119,25 +120,50 @@ def save_json_gz(obj, path: Path):
     with gzip.open(path, "wt") as f: json.dump(obj, f)
 
 def export_region_stats(stats, atlas):
+    gene_names = stats["gene_name"]
     for kind,d in stats.items():
         if kind=="gene_name": continue
+        region_names = {
+                int(rid): info["name"]
+                for rid, info in atlas.structures.items()
+            }
         df = pd.DataFrame(d)
-        for rid in df.columns.drop("gene_name"):
-            name = atlas.hierarchy.get_region(int(rid)).name
+        for rid in df.columns:
+            name = region_names[int(rid)]
             name = re.sub(r'[\\/]', '_', name)
-            save_json_gz(dict(zip(df["gene_name"], df[rid])),
-                         OUTPUT_DIR/f"metrics/{name}_{kind}.json.gz")
+            save_json_gz(
+                dict(zip(gene_names, df[rid])),
+                OUTPUT_DIR / f"metrics/{name}_{kind}.json.gz"
+            )
 
 meta = pd.read_csv(METADATA_CSV)
 meta = meta[meta['sleep_state'] == 'Nothing']
-genes = ['.'.join(os.path.basename(i).split('.')[:-2]) for i in glob("../outputs/gene_volumes/*.nii.gz")]
+meta = meta[meta['plane_of_section'] == 'coronal']
+meta = meta[meta['treatment'] == 'ISH']
+meta = meta[meta['age'] == 'P56']
+meta = meta[meta['gene'] != 'Nothing']
+genes = ['.'.join(os.path.basename(i).split('.')[:-2]) for i in glob("/media/harrycarey/Elements/Allen_Realignment_EBRAINS_dataset/gene_volumes/*.nii.gz")]
+gene_list = meta['gene']
 
-meta[~meta['gene'].isin(genes)]['gene'].value_counts()
+# genes = [g.replace('\uf02a', '*') for g in genes]
+gene_list = [g.replace('*', '\uf02a') for g in gene_list]
+meta['gene'] = gene_list
+meta = meta[meta['gene'].isin(genes)]
+print(len(meta['gene'].unique()))
 atlas = brainglobe_atlasapi.BrainGlobeAtlas("ccfv3augmented_mouse_25um")
+
+region_names = {
+    int(rid): info["name"]
+    for rid, info in atlas.structures.items()
+}
+
 desc_map = build_region_descendants(atlas, ANNOT_VOL)
 stats = compute_region_stats(meta, desc_map, ANNOT_VOL)
 export_region_stats(stats, atlas)
-valid = [atlas.hierarchy.get_region(int(rid)).name
-            for rid,d in desc_map.items() if rid and d]
+valid = [
+    region_names[int(rid)]
+    for rid, d in desc_map.items()
+    if rid and d
+]
 save_json_gz(valid, OUTPUT_DIR/"structure_names.json.gz")
 
